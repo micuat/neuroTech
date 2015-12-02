@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxFFTLive.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -28,4 +30,17 @@ class ofApp : public ofBaseApp{
         ofImage softPoint;
 
         ofVec2f minXY, maxXY;
+
+        ofSoundStream* soundStream;
+        ofxFFTLive fftLive;
+
+        ofxPanel gui;
+        ofxIntSlider sliderChannel;
+        ofxFloatSlider sliderUpperLimit;
+        ofxToggle toggleColor;
+        ofxIntSlider sliderFrame;
+        ofxIntSlider sliderUpperFft;
+        ofxIntSlider sliderLowerFft;
+
+        const int fftN = 64;
 };

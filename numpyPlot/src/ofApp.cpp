@@ -9,47 +9,27 @@ void ofApp::setup() {
     ofxNumpy::load(ofToDataPath("tsneResult.npy"), y);
 
     cnpy::NpyArray t;
-    t = cnpy::npy_load(ofToDataPath("t0.npy"));
     size_t dim, n;
-    ofxNumpy::getSize(t, dim, n);
-    double* data = t.data<double>();
-    for (int i = 0; i < n / dim; i++)
+    double* data;
+    vector<string> filenames;
+    filenames.push_back("t0.npy");
+    filenames.push_back("t1.npy");
+    filenames.push_back("t2.npy");
+    for (auto filename : filenames)
     {
-        vector<float> feat_vector(dim);
-        for (int j = 0; j < dim; j++)
+        t = cnpy::npy_load(ofToDataPath(filename));
+        ofxNumpy::getSize(t, dim, n);
+        data = t.data<double>();
+        for (int i = 0; i < n / dim; i++)
         {
-            feat_vector.at(j) = *data;
-            data++;
+            vector<float> feat_vector(dim);
+            for (int j = 0; j < dim; j++)
+            {
+                feat_vector.at(j) = *data;
+                data++;
+            }
+            feat_matrix.push_back(feat_vector);
         }
-        feat_matrix.push_back(feat_vector);
-    }
-
-    t = cnpy::npy_load(ofToDataPath("t1.npy"));
-    ofxNumpy::getSize(t, dim, n);
-    data = t.data<double>();
-    for (int i = 0; i < n / dim; i++)
-    {
-        vector<float> feat_vector(dim);
-        for (int j = 0; j < dim; j++)
-        {
-            feat_vector.at(j) = *data;
-            data++;
-        }
-        feat_matrix.push_back(feat_vector);
-    }
-
-    t = cnpy::npy_load(ofToDataPath("t2.npy"));
-    ofxNumpy::getSize(t, dim, n);
-    data = t.data<double>();
-    for (int i = 0; i < n / dim; i++)
-    {
-        vector<float> feat_vector(dim);
-        for (int j = 0; j < dim; j++)
-        {
-            feat_vector.at(j) = *data;
-            data++;
-        }
-        feat_matrix.push_back(feat_vector);
     }
 
     float minimum = 1000;
@@ -89,11 +69,26 @@ void ofApp::setup() {
         maxXY.y = max(maxXY.y, p.y);
     }
     ofLogError() << minXY << " " << maxXY;
+
+    soundStream = new ofSoundStream();
+    soundStream->listDevices();
+    soundStream->setDeviceID(3);
+    soundStream->setup(&fftLive, 0, 1, 44100, fftLive.getBufferSize(), 4);
+    fftLive.setMirrorData(false);
+    fftLive.soundStream = soundStream;
+
+    gui.setup();
+    gui.add(sliderChannel.setup("Channel", 0, 0, 15));
+    gui.add(sliderUpperLimit.setup("Upper Limit", 2, 0, 6));
+    gui.add(sliderFrame.setup("Frame", ys.size() * 0.75f, 0, ys.size()));
+    gui.add(toggleColor.setup("Color", false));
+    gui.add(sliderUpperFft.setup("Upper Fft", 30, 1, fftN));
+    gui.add(sliderLowerFft.setup("Lower Fft", 0, 0, fftN - 1));
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    fftLive.update();
 }
 
 //--------------------------------------------------------------
@@ -107,34 +102,59 @@ void ofApp::draw(){
     int count = 0;
     ofVec2f pPrev;
     //int index = (ofGetFrameNum()) % (ys.size() * 2);
-    int index = floor(ofMap(mouseX, 0, ofGetWidth() + 1, 0, ys.size(), true));
+    int index = sliderFrame;
     if (index < ys.size())
         y = ys.at(index);
     else
         y = ys.at(ys.size() * 2 - index - 1);
 
+    float * audioData = new float[fftN];
+    fftLive.getFftPeakData(audioData, fftN);
+
+    ofPushMatrix();
+    ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
     for (auto& p : y)
     {
         //ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.1));
         //ofDrawCircle(p, 5 * 0.1f);
 
-        if(ofGetKeyPressed(' '))
-            ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(alphas.at(count), 0, 5, 0, 0.2f, true)));
+        if(toggleColor)
+            ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(feat_matrix.at(count).at(sliderChannel), 0, sliderUpperLimit, 0, 0.2f, true)));
         else
             ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.2f));
 
-        ofDrawCircle(ofMap(p.x, minXY.x, maxXY.x, 10, ofGetWidth() - 10), ofMap(p.y, minXY.y, maxXY.y, 10, ofGetHeight() - 10), 5);
+        ofVec2f newPos;
+        newPos.x = ofMap(p.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
+        newPos.y = ofMap(p.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
+        float angle = newPos.angle(ofVec2f(0, 1));
+        while (angle < 0) angle += 360;
+        float audioF = ofMap(angle, 0, 360, sliderLowerFft, sliderUpperFft);
+        int audioM = floor(audioF);
+        int audioN = audioM + 1;
+        if (audioM >= fftN - 1)
+        {
+            audioM = fftN - 1;
+            audioN = 0;
+        }
+        float coeff = audioData[audioM] * (audioF - audioM) + audioData[audioN] * abs(audioN - audioF);
+        newPos *= ofMap(coeff, 0, 1, 0.5f, 1.5f);
+        ofDrawCircle(newPos, 5);
 
-        //softPoint.draw(p, 1, 1);
+        //softPoint.draw(newPos, 4, 4);
         //if(count > 0)
-        //    ofLine(pPrev, p);
-        pPrev = p;
+            //ofLine(pPrev, p);
+        //pPrev = newPos;
         count++;
     }
+    ofPopMatrix();
+
+    //fftLive.draw(10, 30);
+
+    gui.draw();
 
     if (ofGetKeyPressed())
     {
-        ofSaveScreen("screen.png");
+        //ofSaveScreen("screen.png");
     }
 }
 
