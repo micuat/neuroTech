@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\ofApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNumpy\libs\cnpy\cnpy.cpp">
+      <Filter>addons\ofxNumpy\libs\cnpy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.cpp">
+      <Filter>addons\ofxFFT\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.cpp">
+      <Filter>addons\ofxFFT\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.cpp">
+      <Filter>addons\ofxFFT\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFT\libs\fft.cpp">
+      <Filter>addons\ofxFFT\libs</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNumpy">
+      <UniqueIdentifier>{4F628487-E42F-C62B-222E-D297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNumpy\src">
+      <UniqueIdentifier>{1FD2BF3C-73A2-EC85-7566-7EDC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNumpy\libs">
+      <UniqueIdentifier>{F6829B25-802F-4750-6B6F-E44A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNumpy\libs\cnpy">
+      <UniqueIdentifier>{812F177C-7AA2-A8D2-06E5-A393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui">
+      <UniqueIdentifier>{4b44b423-84b1-4a6e-88fd-0205f9aa5bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui\src">
+      <UniqueIdentifier>{ba372fab-f572-47c5-8e8d-1cc5799a6701}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFT">
+      <UniqueIdentifier>{fa88d8ba-90e6-4e2b-90bb-60fc7d1253af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFT\src">
+      <UniqueIdentifier>{7c9d6eee-f31e-41cb-8e1d-6c3b35e4b285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFT\libs">
+      <UniqueIdentifier>{1b7c444c-807d-4893-8b5e-75e15a1b42cf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNumpy\src\ofxNumpy.h">
+      <Filter>addons\ofxNumpy\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNumpy\libs\cnpy\cnpy.h">
+      <Filter>addons\ofxNumpy\libs\cnpy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.h">
+      <Filter>addons\ofxFFT\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.h">
+      <Filter>addons\ofxFFT\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.h">
+      <Filter>addons\ofxFFT\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFT\libs\fft.h">
+      <Filter>addons\ofxFFT\libs</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
