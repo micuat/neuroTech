@@ -1,0 +1,4 @@
+ofxAutoReloadedShader
+ofxGui
+ofxOsc
+ofxPubSubOsc
