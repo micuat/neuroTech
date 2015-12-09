@@ -24,7 +24,6 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
         vector<ofVec2f> y;
-        vector<vector<ofVec2f> > ys;
         vector<vector<float> > feat_matrix;
         vector<float> alphas;
         ofImage softPoint;
@@ -43,4 +42,8 @@ class ofApp : public ofBaseApp{
         ofxIntSlider sliderLowerFft;
 
         const int fftN = 64;
+
+        ofVec2f sample;
+        ofVec2f interpolatedSample;
+        int sampleIndex;
 };
