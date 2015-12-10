@@ -6,9 +6,20 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
     std::function<void(ofxOscMessage &)> f = [&](ofxOscMessage& m) {
+        samplePrev = sample;
         sample.x = m.getArgAsFloat(0);
         sample.y = m.getArgAsFloat(1);
         sampleIndex = m.getArgAsInt(2);
+
+        ofVec2f newPos;
+        newPos.x = ofMap(sample.x, minXY.x, maxXY.x, 10, ofGetWidth() - 10);
+        newPos.y = ofMap(sample.y, minXY.y, maxXY.y, 10, ofGetHeight() - 10);
+        ofVec2f newPosPrev;
+        newPosPrev.x = ofMap(samplePrev.x, minXY.x, maxXY.x, 10, ofGetWidth() - 10);
+        newPosPrev.y = ofMap(samplePrev.y, minXY.y, maxXY.y, 10, ofGetHeight() - 10);
+        auto c = ofFloatColor::fromHsb((float)sampleIndex / y.size() * 0.75f, 1, 1, 0.5f);
+        fluid.addTemporalForce(newPos, (newPos - newPosPrev) * velocityCoeff, c, fluidTemp);
+        //y.push_back(sample);
     };
     ofxSubscribeOsc(8000, "/muse/tsne", f);
     sampleIndex = 0;
@@ -43,10 +54,10 @@ void ofApp::setup() {
     for (int i = 0; i < feat_matrix.size(); i++)
     {
         float a = 0;
-        a += feat_matrix.at(i).at(8);
-        a += feat_matrix.at(i).at(9);
-        a += feat_matrix.at(i).at(10);
-        a += feat_matrix.at(i).at(11);
+//        a += feat_matrix.at(i).at(8);
+//        a += feat_matrix.at(i).at(9);
+//        a += feat_matrix.at(i).at(10);
+//        a += feat_matrix.at(i).at(11);
         alphas.push_back(a);
         minimum = min(minimum, a);
         maximum = max(maximum, a);
@@ -83,20 +94,34 @@ void ofApp::setup() {
     gui.add(toggleColor.setup("Color", false));
     gui.add(sliderUpperFft.setup("Upper Fft", 30, 1, fftN));
     gui.add(sliderLowerFft.setup("Lower Fft", 0, 0, fftN - 1));
+    gui.add(fluidDissipation.setup("Fluid Dissipation", 0.99f, 0.9f, 1));
+    gui.add(velocityDissipation.setup("Velocity Dissipation", 0.99f, 0.9f, 0.9999f));
+    gui.add(velocityCoeff.setup("Velocity Coeff", 0.1f, 0, 2));
+    gui.add(fluidTemp.setup("Fluid Temp", 15, 5, 30));
+    gui.add(refreshSec.setup("Refresh Sec", 5, 1, 10));
+
+    fluid.allocate(640, 640);
+    fluid.setGravity(ofPoint());
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     fftLive.update();
+    fluid.update();
+    fluid.dissipation = fluidDissipation;
+    fluid.velocityDissipation = velocityDissipation;
+
+    if (ofGetFrameNum() % (refreshSec * 60) == 0)
+        fluid.clear();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofEnableAlphaBlending();
 
-    ofBackground(255, 255);
-    ofSetColor(ofFloatColor::white);
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    ofBackground(0, 255);
+    //ofSetColor(ofFloatColor::white);
+    //ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
     int count = 0;
     ofVec2f pPrev;
@@ -106,6 +131,7 @@ void ofApp::draw(){
 
     ofFloatColor c;
 
+    fluid.draw();
     ofPushMatrix();
     ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
     for (auto& p : y)
@@ -113,7 +139,7 @@ void ofApp::draw(){
         //ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.1));
         //ofDrawCircle(p, 5 * 0.1f);
 
-        float radius = 5;
+        float radius = 10;
         if(toggleColor)
             ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(feat_matrix.at(count).at(sliderChannel), 0, sliderUpperLimit, 0, 0.2f, true)));
         else
@@ -126,6 +152,7 @@ void ofApp::draw(){
             else
                 ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.2f));
 
+        ofSetColor(ofFloatColor(1, 0.25f));
         ofVec2f newPos;
         newPos.x = ofMap(p.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
         newPos.y = ofMap(p.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
@@ -143,10 +170,10 @@ void ofApp::draw(){
         //newPos *= ofMap(coeff, 0, 1, 0.5f, 1.5f);
         //ofDrawCircle(newPos, radius);
 
-        softPoint.draw(newPos, radius * 2, radius * 2);
-        //if(count > 0)
-            //ofLine(pPrev, p);
-        //pPrev = newPos;
+        //softPoint.draw(newPos, radius * 2, radius * 2);
+        if(count > 0)
+            ofLine(pPrev, newPos);
+        pPrev = newPos;
 
         if (count == sampleIndex)
         {
@@ -158,7 +185,7 @@ void ofApp::draw(){
     }
     ofSetColor(c);
     //ofDrawCircle(interpolatedSample * 2, 5);
-    softPoint.draw(interpolatedSample, 10 * 2, 10 * 2);
+    //softPoint.draw(interpolatedSample, 10 * 2, 10 * 2);
     ofPopMatrix();
 
     //fftLive.draw(10, 30);

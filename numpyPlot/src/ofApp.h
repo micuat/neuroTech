@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxFFTLive.h"
 #include "ofxGui.h"
+#include "ofxFluid.h"
 
 class ofApp : public ofBaseApp{
 
@@ -40,10 +41,18 @@ class ofApp : public ofBaseApp{
         ofxIntSlider sliderFrame;
         ofxIntSlider sliderUpperFft;
         ofxIntSlider sliderLowerFft;
+        ofxFloatSlider fluidDissipation;
+        ofxFloatSlider velocityDissipation;
+        ofxFloatSlider velocityCoeff;
+        ofxFloatSlider fluidTemp;
+        ofxIntSlider refreshSec;
 
         const int fftN = 64;
 
         ofVec2f sample;
+        ofVec2f samplePrev;
         ofVec2f interpolatedSample;
         int sampleIndex;
+
+        ofxFluid fluid;
 };

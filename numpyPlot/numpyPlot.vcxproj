@@ -95,9 +95,12 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFluid\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\composers;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\filters;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\generative;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\operations</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -115,9 +118,12 @@ C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</Addi
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFluid\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\composers;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\filters;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\generative;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\operations</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -135,9 +141,12 @@ C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</Addi
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFluid\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\composers;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\filters;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\generative;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\operations</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -158,9 +167,12 @@ C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</Addi
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;
-C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxNumpy\libs;..\..\..\addons\ofxNumpy\libs\cnpy;..\..\..\addons\ofxNumpy\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxGui\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFFT\libs;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\posix;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\ip\win32;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxOsc\libs\oscpack\src\osc;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details;C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFluid\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\composers;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\filters;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\generative;
+C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxFx\src\operations</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -179,6 +191,8 @@ C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</Addi
     <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.cpp" />
     <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.cpp" />
     <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxFluid\src\ofxFluid.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxFx\src\ofxFXObject.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp" />
@@ -208,6 +222,42 @@ C:\Users\ocad\Desktop\of_v0.9.0_vs_release\addons\ofxPubSubOsc\src\details</Addi
     <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.h" />
     <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.h" />
     <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.h" />
+    <ClInclude Include="..\..\..\addons\ofxFluid\src\ofxFluid.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\composers\ofxBlend.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\composers\ofxClone.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\composers\ofxMask.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\composers\ofxMultiTexture.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxBarrelChromaAb.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxBloom.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxBlur.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxBokeh.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxChromaAb.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxChromaGlitch.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxContrast.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxGaussianBlur.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxGlow.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxGrayscale.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxInverse.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxLUT.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxMedian.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\filters\ofxOldTv.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\generative\ofxFBM.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\generative\ofxFire.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\generative\ofxGrayScott.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\generative\ofxNoise.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\generative\ofxTint.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\ofxFX.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\ofxFXObject.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\ofxSwapBuffer.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxAbsDiff.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxBounce.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxDisplacePixels.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxEdgeDetect.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxFlow.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxNormals.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxRipples.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxSubstract.h" />
+    <ClInclude Include="..\..\..\addons\ofxFx\src\operations\ofxThreshold.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h" />
