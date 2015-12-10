@@ -85,7 +85,7 @@ void ofApp::update()
 //
 void ofApp::draw()
 {
-    float timeDiff = ofMap(ofGetElapsedTimef() - particles.lastBang, 0, 0.2f, 0, 1);
+    float timeDiff = ofMap(ofGetElapsedTimef() - particles.lastBang, 0, particles.bangTime, 0, 1);
     ofBackgroundGradient(ofColor(ofMap(timeDiff, 0, 1, 255, 40, true)), ofColor(0, 0, 0), OF_GRADIENT_CIRCULAR);
 
 	particles.update( time, timeStep );

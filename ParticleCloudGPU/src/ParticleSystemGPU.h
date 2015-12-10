@@ -57,7 +57,8 @@ class ParticleSystemGPU
 		ofParameter<ofColor>	startColor;
 		ofParameter<ofColor>	endColor;
 		
-		ofParameter<float>		particleSize;
+        ofParameter<float>		particleSize;
+        ofParameter<float>		bangTime;
         int spawnState;
         float lastBang;
 };

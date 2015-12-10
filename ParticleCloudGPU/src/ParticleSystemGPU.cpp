@@ -25,7 +25,8 @@ void ParticleSystemGPU::init( int _texSize )
 	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( particleSize.set("Particle Size", 0.01, 0.0001f, 0.05f) );
 	gui.add( stringTheory.set("String", 0.2f, 0.0001f, 1.0f) );
-	//gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
+    gui.add( bangTime.set("Bang Time", 0.5f, 0.0001f, 1.0f));
+    //gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
 	//gui.add( twistNoisePosScale.set("Twist Noise Pos Scale", 0.25, 0.0f, 2.0f) );
 	//gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
 	//gui.add( twistMaxAng.set("Twist Max Ang", 2.5, -5, 5) );
@@ -152,7 +153,7 @@ void ParticleSystemGPU::init( int _texSize )
 //
 void ParticleSystemGPU::update( float _time, float _timeStep )
 {
-    float timeDiff = ofMap(ofGetElapsedTimef() - lastBang, 0, 0.5f, 0, 1);
+    float timeDiff = ofMap(ofGetElapsedTimef() - lastBang, 0, bangTime, 0, 1);
 
     ofEnableBlendMode( OF_BLENDMODE_DISABLED ); // Important! We just want to write the data as is to the target fbo
 	
@@ -204,7 +205,7 @@ void ParticleSystemGPU::draw( ofCamera* _camera )
 	ofFloatColor particleStartCol = startColor.get();
 	ofFloatColor particleEndCol = endColor.get();
 
-    float timeDiff = ofMap(ofGetElapsedTimef() - lastBang, 0, 0.5f, 0, 1);
+    float timeDiff = ofMap(ofGetElapsedTimef() - lastBang, 0, bangTime, 0, 1);
    
     ofSetColor( ofColor::white );
 	//ofEnableBlendMode( OF_BLENDMODE_ADD );
