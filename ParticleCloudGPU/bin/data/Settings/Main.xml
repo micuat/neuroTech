@@ -11,13 +11,14 @@
 	<Twist_Noise_Pos_Scale>0.06</Twist_Noise_Pos_Scale>
 	<Twist_Min_Ang>-0.266667</Twist_Min_Ang>
 	<Twist_Max_Ang>0.9</Twist_Max_Ang>
-	<Particle_Size>0.00874933</Particle_Size>
+	<Particle_Size>0.0112443</Particle_Size>
 	<Particle_Alpha>0.74</Particle_Alpha>
 	<Particle_Opacity_Scale>0.786667</Particle_Opacity_Scale>
 	<Light_Position>-1.05442, 1.66667, -0.85034</Light_Position>
 	<Light_Look_At>0.0340133, -0.340136, -0.680272</Light_Look_At>
 <Main/>
-<String>0.050095</String>
+<String>0.16675</String>
 <Wind_Bang>1.68707, 1.06122, 1.68707</Wind_Bang>
 <Bang_Time>0.073426</Bang_Time>
+<Particle_Size_Min>0.00509</Particle_Size_Min>
 </Main>

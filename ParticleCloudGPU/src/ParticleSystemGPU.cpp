@@ -24,6 +24,7 @@ void ParticleSystemGPU::init( int _texSize )
     gui.add( startColor.set("Start Color", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( particleSize.set("Particle Size", 0.01, 0.0001f, 0.05f) );
+	gui.add( particleSizeMin.set("Particle Size Min", 0.001, 0.0001f, 0.05f) );
 	gui.add( stringTheory.set("String", 0.2f, 0.0001f, 1.0f) );
     gui.add( bangTime.set("Bang Time", 0.5f, 0.0001f, 1.0f));
     //gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
@@ -226,18 +227,19 @@ void ParticleSystemGPU::draw( ofCamera* _camera )
 
 		particleDrawUnsorted.setUniform1f("u_particleMaxAge", particleMaxAge );
 	
-		particleDrawUnsorted.setUniform1f("u_particleDiameter", particleSize );
 		particleDrawUnsorted.setUniform1f("u_screenWidth", ofGetWidth() );
 
         if (timeDiff < 1)
         {
+            particleDrawUnsorted.setUniform1f("u_particleDiameter", ofMap(timeDiff, 0.5f, 1, particleSize, particleSizeMin, true));
             ofFloatColor c = particleStartCol.lerp(particleEndCol, timeDiff);
             particleDrawUnsorted.setUniform4fv("u_particleStartColor", particleStartCol.v);
             particleDrawUnsorted.setUniform4fv("u_particleEndColor", c.v);
-            particleDrawUnsorted.setUniform1f("u_stringTheory", ofMap(timeDiff, 0, 1, 0, stringTheory));
+            particleDrawUnsorted.setUniform1f("u_stringTheory", ofMap(timeDiff, 0.5f, 1, 0, stringTheory, true));
         }
         else
         {
+            particleDrawUnsorted.setUniform1f("u_particleDiameter", particleSizeMin);
             particleDrawUnsorted.setUniform4fv("u_particleStartColor", particleStartCol.v);
             particleDrawUnsorted.setUniform4fv("u_particleEndColor", particleEndCol.v);
             particleDrawUnsorted.setUniform1f("u_stringTheory", stringTheory);
