@@ -1,9 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxFFTLive.h"
 #include "ofxGui.h"
-#include "ofxFluid.h"
 
 class ofApp : public ofBaseApp{
 
@@ -25,40 +23,25 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
         vector<ofVec2f> y;
+        vector<ofVec2f> yNew;
         vector<vector<float> > feat_matrix;
         vector<float> alphas;
         ofImage softPoint;
 
         ofVec2f minXY, maxXY;
 
-        ofSoundStream* soundStream;
-        ofxFFTLive fftLive;
-
         ofxPanel gui;
         ofxIntSlider sliderChannel;
         ofxFloatSlider sliderUpperLimit;
         ofxToggle toggleColor;
         ofxIntSlider sliderFrame;
-        ofxIntSlider sliderUpperFft;
-        ofxIntSlider sliderLowerFft;
-        ofxFloatSlider fluidDissipation;
-        ofxFloatSlider velocityDissipation;
-        ofxFloatSlider velocityCoeff;
-        ofxFloatSlider fluidTemp;
-        ofxFloatSlider fluidAlpha;
         ofxIntSlider refreshSec;
         ofxToggle mouseDebug;
-
-        const int fftN = 64;
 
         ofVec2f sample;
         ofVec2f samplePrev;
         ofVec2f newPosPrev;
-        ofVec2f interpolatedSample;
         int sampleIndex;
-
-        ofxFluid fluid;
-        ofFbo fbo;
 
         ofVboMesh strings;
         bool drawGui;

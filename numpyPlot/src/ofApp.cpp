@@ -11,13 +11,11 @@ void ofApp::setup() {
         sample.y = m.getArgAsFloat(1);
         sampleIndex = m.getArgAsInt(2);
 
+        yNew.push_back(sample);
+
         ofVec2f newPos;
         newPos.x = ofMap(sample.x, minXY.x, maxXY.x, 10, ofGetWidth() - 10);
         newPos.y = ofMap(sample.y, minXY.y, maxXY.y, 10, ofGetHeight() - 10);
-        auto c = ofFloatColor::fromHsb((float)sampleIndex / y.size() * 0.75f, 1, 1);
-        fluid.addTemporalForce(newPos, (newPos - newPosPrev) * velocityCoeff, c * fluidAlpha, fluidTemp);
-        newPosPrev = newPos;
-        //y.push_back(sample);
     };
     ofxSubscribeOsc(8000, "/muse/tsne", f);
     sampleIndex = 0;
@@ -106,59 +104,14 @@ void ofApp::setup() {
         }
     }
 
-    soundStream = new ofSoundStream();
-    soundStream->listDevices();
-    soundStream->setDeviceID(2);
-    soundStream->setup(&fftLive, 0, 1, 44100, fftLive.getBufferSize(), 4);
-    fftLive.setMirrorData(false);
-    fftLive.soundStream = soundStream;
-
     gui.setup();
     gui.add(sliderChannel.setup("Channel", 0, 0, 15));
     gui.add(sliderUpperLimit.setup("Upper Limit", 2, 0, 6));
     gui.add(toggleColor.setup("Color", false));
-    gui.add(sliderUpperFft.setup("Upper Fft", 30, 1, fftN));
-    gui.add(sliderLowerFft.setup("Lower Fft", 0, 0, fftN - 1));
-    gui.add(fluidDissipation.setup("Fluid Dissipation", 0.99f, 0.9f, 1));
-    gui.add(velocityDissipation.setup("Velocity Dissipation", 0.99f, 0.9f, 0.9999f));
-    gui.add(velocityCoeff.setup("Velocity Coeff", 0.1f, 0, 2));
-    gui.add(fluidTemp.setup("Fluid Temp", 15, 5, 30));
-    gui.add(fluidAlpha.setup("Fluid Alpha", 0.5f, 0, 1));
-    gui.add(refreshSec.setup("Refresh Sec", 5, 1, 10));
+    gui.add(refreshSec.setup("Refresh Sec", 20, 10, 100));
     gui.add(mouseDebug.setup("Mouse Debug", false));
     gui.loadFromFile("settings.xml");
     drawGui = true;
-
-    fluid.dissipation = 1;
-    fluid.velocityDissipation = 0.99f;
-
-    fluid.allocate(640, 640);
-
-    fluid.begin();
-    ofBackground(255, 255);
-    ofSetColor(0, 255);
-    ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
-    strings.draw();
-    int nn = 3;
-    for (int i = -nn; i <= nn; i++)
-        for (int j = -nn; j <= nn; j++)
-        {
-            ofPushMatrix();
-            ofTranslate(i, j);
-            strings.draw();
-            ofPopMatrix();
-        }
-    fluid.end();
-    fluid.setUseObstacles(false);
-
-    fluid.setGravity(ofPoint());
-
-    fbo.allocate(640, 640, GL_RGBA);
-    fbo.begin();
-    ofBackground(0, 255);
-    ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
-    strings.draw();
-    fbo.end();
 }
 
 //--------------------------------------------------------------
@@ -168,51 +121,28 @@ void ofApp::update(){
         ofVec2f newPos;
         newPos.x = mouseX;
         newPos.y = mouseY;
-        auto c = ofFloatColor::fromHsb(ofMap(sinf(ofGetElapsedTimef()), -1, 1, 0, 0.75f), 1, 1, 0.5f);
-        fluid.addTemporalForce(newPos, (newPos - newPosPrev) * velocityCoeff, c * fluidAlpha, fluidTemp);
         newPosPrev = newPos;
     }
-    fftLive.update();
-    fluid.update();
-    //fluid.dissipation = fluidDissipation;
-    //fluid.velocityDissipation = velocityDissipation;
 
-    if (ofGetFrameNum() % (refreshSec * 60) == 0)
-    {
-        fluid.clear();
-        //fluid.addColor(fbo);
-    }
+    if (yNew.size() >= refreshSec)
+        yNew.clear();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofEnableAlphaBlending();
 
-    ofBackground(0, 255);
+    ofBackground(255, 255);
     //ofSetColor(ofFloatColor::white);
     //ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
     int count = 0;
     ofVec2f pPrev;
 
-    float * audioData = new float[fftN];
-    fftLive.getFftPeakData(audioData, fftN);
-
     ofFloatColor c;
-
-    fluid.draw();
-    ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
-    fbo.draw(0, 0);
-    ofDisableBlendMode();
 
     ofPushMatrix();
     ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
-    //ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
-    ofEnableAlphaBlending();
-    ofSetColor(255, 70);
-    //strings.draw();
-    ofSetColor(255, 255);
-    //ofDisableBlendMode();
     for (auto& p : y)
     {
         //ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.1));
@@ -222,53 +152,37 @@ void ofApp::draw(){
         if(toggleColor)
             ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(feat_matrix.at(count).at(sliderChannel), 0, sliderUpperLimit, 0, 0.2f, true)));
         else
-            if (count == sampleIndex)
-            {
-                //radius = 10;
-                //ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 1));
-                ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.2f));
-            }
-            else
-                ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.2f));
+            ofSetColor(ofFloatColor::fromHsb((float)count / y.size() * 0.75f, 1, 1, 0.2f));
 
-        ofSetColor(ofFloatColor(1, 0.25f));
         ofVec2f newPos;
         newPos.x = ofMap(p.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
         newPos.y = ofMap(p.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
-        float angle = newPos.angle(ofVec2f(0, 1));
-        while (angle < 0) angle += 360;
-        float audioF = ofMap(angle, 0, 360, sliderLowerFft, sliderUpperFft);
-        int audioM = floor(audioF);
-        int audioN = audioM + 1;
-        if (audioM >= fftN - 1)
-        {
-            audioM = fftN - 1;
-            audioN = 0;
-        }
-        float coeff = audioData[audioM] * (audioF - audioM) + audioData[audioN] * abs(audioN - audioF);
-        //newPos *= ofMap(coeff, 0, 1, 0.5f, 1.5f);
-        //ofDrawCircle(newPos, radius);
 
         //softPoint.draw(newPos, radius * 2, radius * 2);
         //if(count > 0)
         //    ofLine(pPrev, newPos);
         //pPrev = newPos;
 
-        if (count == sampleIndex)
-        {
-            interpolatedSample.x = interpolatedSample.x * 0.9f + newPos.x * 0.1f;
-            interpolatedSample.y = interpolatedSample.y * 0.9f + newPos.y * 0.1f;
-            c = ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 1);
-        }
         count++;
     }
 
-    ofSetColor(c);
-    //ofDrawCircle(interpolatedSample * 2, 5);
-    //softPoint.draw(interpolatedSample, 10 * 2, 10 * 2);
-    ofPopMatrix();
+    count = 0;
+    for (auto& p : yNew)
+    {
+        float radius = 10;
+        if (toggleColor)
+            ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(feat_matrix.at(count).at(sliderChannel), 0, sliderUpperLimit, 0, 0.2f, true)));
+        else
+            ofSetColor(ofFloatColor::fromHsb((float)count / refreshSec * 0.75f, 1, 1, 0.2f));
 
-    //fftLive.draw(10, 30);
+        ofVec2f newPos;
+        newPos.x = ofMap(p.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
+        newPos.y = ofMap(p.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
+
+        softPoint.draw(newPos, radius * 2, radius * 2);
+        count++;
+    }
+    ofPopMatrix();
 
     if(drawGui)
         gui.draw();
