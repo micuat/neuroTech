@@ -45,14 +45,21 @@ class ofApp : public ofBaseApp{
         ofxFloatSlider velocityDissipation;
         ofxFloatSlider velocityCoeff;
         ofxFloatSlider fluidTemp;
+        ofxFloatSlider fluidAlpha;
         ofxIntSlider refreshSec;
+        ofxToggle mouseDebug;
 
         const int fftN = 64;
 
         ofVec2f sample;
         ofVec2f samplePrev;
+        ofVec2f newPosPrev;
         ofVec2f interpolatedSample;
         int sampleIndex;
 
         ofxFluid fluid;
+        ofFbo fbo;
+
+        ofVboMesh strings;
+        bool drawGui;
 };

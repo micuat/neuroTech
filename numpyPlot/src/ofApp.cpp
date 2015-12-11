@@ -14,11 +14,9 @@ void ofApp::setup() {
         ofVec2f newPos;
         newPos.x = ofMap(sample.x, minXY.x, maxXY.x, 10, ofGetWidth() - 10);
         newPos.y = ofMap(sample.y, minXY.y, maxXY.y, 10, ofGetHeight() - 10);
-        ofVec2f newPosPrev;
-        newPosPrev.x = ofMap(samplePrev.x, minXY.x, maxXY.x, 10, ofGetWidth() - 10);
-        newPosPrev.y = ofMap(samplePrev.y, minXY.y, maxXY.y, 10, ofGetHeight() - 10);
-        auto c = ofFloatColor::fromHsb((float)sampleIndex / y.size() * 0.75f, 1, 1, 0.5f);
-        fluid.addTemporalForce(newPos, (newPos - newPosPrev) * velocityCoeff, c, fluidTemp);
+        auto c = ofFloatColor::fromHsb((float)sampleIndex / y.size() * 0.75f, 1, 1);
+        fluid.addTemporalForce(newPos, (newPos - newPosPrev) * velocityCoeff, c * fluidAlpha, fluidTemp);
+        newPosPrev = newPos;
         //y.push_back(sample);
     };
     ofxSubscribeOsc(8000, "/muse/tsne", f);
@@ -81,6 +79,33 @@ void ofApp::setup() {
     }
     ofLogError() << minXY << " " << maxXY;
 
+    strings.setMode(OF_PRIMITIVE_LINES);
+    for (int i = 0; i < y.size(); i++)
+    {
+        for (int j = i; j < y.size(); j++)
+        {
+            auto p0 = y.at(i);
+            auto p1 = y.at(j);
+            p0.x = ofMap(p0.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
+            p0.y = ofMap(p0.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
+            p1.x = ofMap(p1.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
+            p1.y = ofMap(p1.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
+            float dist = p0.distance(p1);
+            float distThreshold = 100;
+            if (dist < distThreshold)
+            {
+                strings.addVertex(p0);
+                strings.addVertex(p1);
+                //strings.addColor(ofFloatColor::black);
+                //strings.addColor(ofFloatColor::black);
+                strings.addColor(ofFloatColor(1, ofMap(dist, distThreshold, 0, 0, 0.5f)));
+                strings.addColor(ofFloatColor(1, ofMap(dist, distThreshold, 0, 0, 0.5f)));
+                strings.addIndex(strings.getNumVertices() - 2);
+                strings.addIndex(strings.getNumVertices() - 1);
+            }
+        }
+    }
+
     soundStream = new ofSoundStream();
     soundStream->listDevices();
     soundStream->setDeviceID(2);
@@ -98,21 +123,65 @@ void ofApp::setup() {
     gui.add(velocityDissipation.setup("Velocity Dissipation", 0.99f, 0.9f, 0.9999f));
     gui.add(velocityCoeff.setup("Velocity Coeff", 0.1f, 0, 2));
     gui.add(fluidTemp.setup("Fluid Temp", 15, 5, 30));
+    gui.add(fluidAlpha.setup("Fluid Alpha", 0.5f, 0, 1));
     gui.add(refreshSec.setup("Refresh Sec", 5, 1, 10));
+    gui.add(mouseDebug.setup("Mouse Debug", false));
+    gui.loadFromFile("settings.xml");
+    drawGui = true;
+
+    fluid.dissipation = 1;
+    fluid.velocityDissipation = 0.99f;
 
     fluid.allocate(640, 640);
+
+    fluid.begin();
+    ofBackground(255, 255);
+    ofSetColor(0, 255);
+    ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
+    strings.draw();
+    int nn = 3;
+    for (int i = -nn; i <= nn; i++)
+        for (int j = -nn; j <= nn; j++)
+        {
+            ofPushMatrix();
+            ofTranslate(i, j);
+            strings.draw();
+            ofPopMatrix();
+        }
+    fluid.end();
+    fluid.setUseObstacles(false);
+
     fluid.setGravity(ofPoint());
+
+    fbo.allocate(640, 640, GL_RGBA);
+    fbo.begin();
+    ofBackground(0, 255);
+    ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
+    strings.draw();
+    fbo.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    if (mouseDebug && ofGetFrameNum() % 15 == 0)
+    {
+        ofVec2f newPos;
+        newPos.x = mouseX;
+        newPos.y = mouseY;
+        auto c = ofFloatColor::fromHsb(ofMap(sinf(ofGetElapsedTimef()), -1, 1, 0, 0.75f), 1, 1, 0.5f);
+        fluid.addTemporalForce(newPos, (newPos - newPosPrev) * velocityCoeff, c * fluidAlpha, fluidTemp);
+        newPosPrev = newPos;
+    }
     fftLive.update();
     fluid.update();
-    fluid.dissipation = fluidDissipation;
-    fluid.velocityDissipation = velocityDissipation;
+    //fluid.dissipation = fluidDissipation;
+    //fluid.velocityDissipation = velocityDissipation;
 
     if (ofGetFrameNum() % (refreshSec * 60) == 0)
+    {
         fluid.clear();
+        //fluid.addColor(fbo);
+    }
 }
 
 //--------------------------------------------------------------
@@ -132,8 +201,18 @@ void ofApp::draw(){
     ofFloatColor c;
 
     fluid.draw();
+    ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
+    fbo.draw(0, 0);
+    ofDisableBlendMode();
+
     ofPushMatrix();
     ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
+    //ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
+    ofEnableAlphaBlending();
+    ofSetColor(255, 70);
+    //strings.draw();
+    ofSetColor(255, 255);
+    //ofDisableBlendMode();
     for (auto& p : y)
     {
         //ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.1));
@@ -171,9 +250,9 @@ void ofApp::draw(){
         //ofDrawCircle(newPos, radius);
 
         //softPoint.draw(newPos, radius * 2, radius * 2);
-        if(count > 0)
-            ofLine(pPrev, newPos);
-        pPrev = newPos;
+        //if(count > 0)
+        //    ofLine(pPrev, newPos);
+        //pPrev = newPos;
 
         if (count == sampleIndex)
         {
@@ -183,6 +262,7 @@ void ofApp::draw(){
         }
         count++;
     }
+
     ofSetColor(c);
     //ofDrawCircle(interpolatedSample * 2, 5);
     //softPoint.draw(interpolatedSample, 10 * 2, 10 * 2);
@@ -190,7 +270,8 @@ void ofApp::draw(){
 
     //fftLive.draw(10, 30);
 
-    gui.draw();
+    if(drawGui)
+        gui.draw();
 
     if (ofGetKeyPressed())
     {
@@ -200,7 +281,8 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if (key == OF_KEY_TAB)
+        drawGui = !drawGui;
 }
 
 //--------------------------------------------------------------
