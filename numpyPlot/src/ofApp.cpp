@@ -5,6 +5,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+    ofHideCursor();
+
     std::function<void(ofxOscMessage &)> f = [&](ofxOscMessage& m) {
         samplePrev = sample;
         sample.x = m.getArgAsFloat(0);
@@ -13,13 +15,29 @@ void ofApp::setup() {
 
         yNew.push_back(sample);
 
-        ofVec2f newPos;
-        newPos.x = ofMap(sample.x, minXY.x, maxXY.x, 10, ofGetWidth() - 10);
-        newPos.y = ofMap(sample.y, minXY.y, maxXY.y, 10, ofGetHeight() - 10);
+        auto p0 = sample;
+        p0.x = ofMap(p0.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
+        p0.y = ofMap(p0.y, minXY.y, maxXY.y, -height * 0.5f + 10, height * 0.5f - 10);
+        for (int i = 0; i < yNew.size(); i++)
+        {
+            auto p1 = yNew.at(i);
+            p1.x = ofMap(p1.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
+            p1.y = ofMap(p1.y, minXY.y, maxXY.y, -height * 0.5f + 10, height * 0.5f - 10);
+            float dist = p0.distance(p1);
+            if (dist < distThreshold)
+            {
+                stringsNew.addVertex(p0);
+                stringsNew.addVertex(p1);
+                stringsNew.addColor(ofFloatColor::fromHsb((float)i / (refreshSec * 10) * 0.75f, 1, 1, ofMap(dist, distThreshold * 0.5f, 0, 0, lineAlpha)));
+                stringsNew.addColor(ofFloatColor::fromHsb((float)(yNew.size() - 1) / (refreshSec * 10) * 0.75f, 1, 1, ofMap(dist, distThreshold * 0.5f, 0, 0, lineAlpha)));
+                stringsNew.addIndex(stringsNew.getNumVertices() - 2);
+                stringsNew.addIndex(stringsNew.getNumVertices() - 1);
+            }
+        }
     };
     ofxSubscribeOsc(8000, "/muse/tsne", f);
     sampleIndex = 0;
-    ofSetWindowShape(640, 640);
+    //ofSetWindowShape(640, 640);
     //ofSetWindowShape(560, 315);
     ofxNumpy::load("C:\\Users\\ocad\\Documents\\bci_workshop\\tsneResult.npy", y);
 
@@ -78,16 +96,17 @@ void ofApp::setup() {
     ofLogError() << minXY << " " << maxXY;
 
     strings.setMode(OF_PRIMITIVE_LINES);
+    stringsNew.setMode(OF_PRIMITIVE_LINES);
     for (int i = 0; i < y.size(); i++)
     {
         for (int j = i; j < y.size(); j++)
         {
             auto p0 = y.at(i);
             auto p1 = y.at(j);
-            p0.x = ofMap(p0.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
-            p0.y = ofMap(p0.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
-            p1.x = ofMap(p1.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
-            p1.y = ofMap(p1.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
+            p0.x = ofMap(p0.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
+            p0.y = ofMap(p0.y, minXY.y, maxXY.y, -height * 0.5f + 10, height * 0.5f - 10);
+            p1.x = ofMap(p1.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
+            p1.y = ofMap(p1.y, minXY.y, maxXY.y, -height * 0.5f + 10, height * 0.5f - 10);
             float dist = p0.distance(p1);
             float distThreshold = 100;
             if (dist < distThreshold)
@@ -96,8 +115,8 @@ void ofApp::setup() {
                 strings.addVertex(p1);
                 //strings.addColor(ofFloatColor::black);
                 //strings.addColor(ofFloatColor::black);
-                strings.addColor(ofFloatColor(1, ofMap(dist, distThreshold, 0, 0, 0.5f)));
-                strings.addColor(ofFloatColor(1, ofMap(dist, distThreshold, 0, 0, 0.5f)));
+                strings.addColor(ofFloatColor::fromHsb((float)i / y.size() * 0.75f, 1, 1, ofMap(dist, distThreshold, 0, 0, 0.5f)));
+                strings.addColor(ofFloatColor::fromHsb((float)j / y.size() * 0.75f, 1, 1, ofMap(dist, distThreshold, 0, 0, 0.5f)));
                 strings.addIndex(strings.getNumVertices() - 2);
                 strings.addIndex(strings.getNumVertices() - 1);
             }
@@ -108,10 +127,18 @@ void ofApp::setup() {
     gui.add(sliderChannel.setup("Channel", 0, 0, 15));
     gui.add(sliderUpperLimit.setup("Upper Limit", 2, 0, 6));
     gui.add(toggleColor.setup("Color", false));
-    gui.add(refreshSec.setup("Refresh Sec", 20, 10, 100));
+    gui.add(refreshSec.setup("Refresh Sec", 5, 1, 20));
     gui.add(mouseDebug.setup("Mouse Debug", false));
+    gui.add(distThreshold.setup("Distance", 150, 50, 300));
+    gui.add(lineAlpha.setup("Line Alpha", 0.5f, 0, 1));
     gui.loadFromFile("settings.xml");
-    drawGui = true;
+    drawGui = false;
+
+    fbo.allocate(width * 2, height * 2, GL_RGB);
+
+    ofSetWindowPosition(1920 + 400, -50);
+    ofSetWindowShape(1024 + 200, 768 + 200);
+    //ofSetFullscreen(true);
 }
 
 //--------------------------------------------------------------
@@ -123,16 +150,14 @@ void ofApp::update(){
         newPos.y = mouseY;
         newPosPrev = newPos;
     }
-
-    if (yNew.size() >= refreshSec)
-        yNew.clear();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofEnableAlphaBlending();
 
-    ofBackground(255, 255);
+    //ofBackgroundGradient(ofColor(40, 40, 40), ofColor(0, 0, 0), OF_GRADIENT_CIRCULAR);
+    ofBackground(0, 255);
     //ofSetColor(ofFloatColor::white);
     //ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
@@ -141,23 +166,28 @@ void ofApp::draw(){
 
     ofFloatColor c;
 
+    ofSetLineWidth(2);
+
     ofPushMatrix();
     ofTranslate(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f);
+    stringsNew.draw();
+    
     for (auto& p : y)
     {
         //ofSetColor(ofFloatColor::fromHsb((float)count / y.size(), 1, 1, 0.1));
         //ofDrawCircle(p, 5 * 0.1f);
 
-        float radius = 10;
+        float radius = 5;
         if(toggleColor)
             ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(feat_matrix.at(count).at(sliderChannel), 0, sliderUpperLimit, 0, 0.2f, true)));
         else
-            ofSetColor(ofFloatColor::fromHsb((float)count / y.size() * 0.75f, 1, 1, 0.2f));
+            ofSetColor(ofFloatColor::fromHsb((float)count / y.size() * 0.75f, 1, 1, 0.5f));
 
         ofVec2f newPos;
-        newPos.x = ofMap(p.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
-        newPos.y = ofMap(p.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
+        newPos.x = ofMap(p.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
+        newPos.y = ofMap(p.y, minXY.y, maxXY.y, -height * 0.5f + 10, height * 0.5f - 10);
 
+        ofDrawCircle(newPos, radius);
         //softPoint.draw(newPos, radius * 2, radius * 2);
         //if(count > 0)
         //    ofLine(pPrev, newPos);
@@ -165,7 +195,7 @@ void ofApp::draw(){
 
         count++;
     }
-
+    /*
     count = 0;
     for (auto& p : yNew)
     {
@@ -173,30 +203,101 @@ void ofApp::draw(){
         if (toggleColor)
             ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(feat_matrix.at(count).at(sliderChannel), 0, sliderUpperLimit, 0, 0.2f, true)));
         else
-            ofSetColor(ofFloatColor::fromHsb((float)count / refreshSec * 0.75f, 1, 1, 0.2f));
+            ofSetColor(ofFloatColor::fromHsb((float)count / (refreshSec * 10) * 0.75f, 1, 1, 0.2f));
 
         ofVec2f newPos;
-        newPos.x = ofMap(p.x, minXY.x, maxXY.x, -ofGetWidth() * 0.5f + 10, ofGetWidth() * 0.5f - 10);
-        newPos.y = ofMap(p.y, minXY.y, maxXY.y, -ofGetHeight() * 0.5f + 10, ofGetHeight() * 0.5f - 10);
+        newPos.x = ofMap(p.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
+        newPos.y = ofMap(p.y, minXY.y, maxXY.y, -height * 0.5f + 10, height * 0.5f - 10);
 
-        softPoint.draw(newPos, radius * 2, radius * 2);
+        //softPoint.draw(newPos, radius * 2, radius * 2);
         count++;
     }
+    */
     ofPopMatrix();
 
     if(drawGui)
         gui.draw();
 
-    if (ofGetKeyPressed())
+    if (yNew.size() >= refreshSec * 10)
     {
-        //ofSaveScreen("screen.png");
+        fbo.begin();
+        ofEnableAlphaBlending();
+        ofEnableAntiAliasing();
+
+        auto start = ofColor(40, 40, 40), end = ofColor(0, 0, 0);
+        ofVboMesh gradientMesh;
+        float w = width * 2, h = height * 2;
+        gradientMesh.clear();
+        gradientMesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+        gradientMesh.setUsage(GL_STREAM_DRAW);
+            // this could be optimized by building a single mesh once, then copying
+            // it and just adding the colors whenever the function is called.
+            ofVec2f center(w / 2, h / 2);
+            gradientMesh.addVertex(center);
+            gradientMesh.addColor(start);
+            int n = 32; // circular gradient resolution
+            float angleBisector = TWO_PI / (n * 2);
+            float smallRadius = ofDist(0, 0, w / 2, h / 2);
+            float bigRadius = smallRadius / cos(angleBisector);
+            for (int i = 0; i <= n; i++) {
+                float theta = i * TWO_PI / n;
+                gradientMesh.addVertex(center + ofVec2f(sin(theta), cos(theta)) * bigRadius);
+                gradientMesh.addColor(end);
+            }
+        GLboolean depthMaskEnabled;
+        glGetBooleanv(GL_DEPTH_WRITEMASK, &depthMaskEnabled);
+        glDepthMask(GL_FALSE);
+        gradientMesh.draw();
+        if (depthMaskEnabled) {
+            glDepthMask(GL_TRUE);
+        }
+
+        ofTranslate(width * 0.5f * 2, height * 0.5f * 2);
+        ofScale(2, 2);
+
+        count = 0;
+        for (auto& p : y)
+        {
+            ofSetColor(ofFloatColor::fromHsb((float)count / y.size() * 0.75f, 1, 1, 0.5f));
+
+            ofVec2f newPos;
+            newPos.x = ofMap(p.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
+            newPos.y = ofMap(p.y, minXY.y, maxXY.y, -height * 0.5f + 10, height * 0.5f - 10);
+            float radius = 5;
+            ofDrawCircle(newPos, radius);
+            count++;
+        }
+
+        ofSetColor(255, 255);
+        stringsNew.draw();
+        fbo.end();
+
+        ofImage image;
+        image.allocate(width * 2, height * 2, OF_IMAGE_COLOR);
+        fbo.readToPixels(image.getPixels());
+        image.resize(width, height);
+        image.update();
+        image.save(ofGetTimestampString() + ".png");
+        yNew.clear();
+        stringsNew.clear();
+        stringsNew.setMode(OF_PRIMITIVE_LINES);
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if (key == OF_KEY_TAB)
+    {
         drawGui = !drawGui;
+        if (drawGui)
+            ofShowCursor();
+        else
+            ofHideCursor();
+    }
+    if (key == 'f')
+    {
+        ofToggleFullscreen();
+    }
 }
 
 //--------------------------------------------------------------

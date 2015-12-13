@@ -36,6 +36,8 @@ class ofApp : public ofBaseApp{
         ofxToggle toggleColor;
         ofxIntSlider sliderFrame;
         ofxIntSlider refreshSec;
+        ofxIntSlider distThreshold;
+        ofxFloatSlider lineAlpha;
         ofxToggle mouseDebug;
 
         ofVec2f sample;
@@ -44,5 +46,10 @@ class ofApp : public ofBaseApp{
         int sampleIndex;
 
         ofVboMesh strings;
+        ofVboMesh stringsNew;
         bool drawGui;
+
+        const int width = 640, height = 640;
+
+        ofFbo fbo;
 };
