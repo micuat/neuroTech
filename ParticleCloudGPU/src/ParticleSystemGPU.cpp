@@ -7,11 +7,18 @@
 //
 
 #include "ParticleSystemGPU.h"
+#include "ofxPubSubOsc.h"
 
 //-----------------------------------------------------------------------------------------
 //
 void ParticleSystemGPU::init( int _texSize )
 {
+    ofxSubscribeOsc(9990, "/pcg/string", stringTheory);
+    std::function<void(ofxOscMessage &)> f = [&](ofxOscMessage& m) {
+        lastBang = ofGetElapsedTimef();
+    };
+    ofxSubscribeOsc(9990, "/pcg/bang", f);
+
 	string xmlSettingsPath = "Settings/Main.xml";
 	gui.setup( "Main", xmlSettingsPath );
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
