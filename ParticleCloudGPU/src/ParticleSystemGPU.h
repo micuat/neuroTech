@@ -33,6 +33,7 @@ class ParticleSystemGPU
         ofVboMesh				particlePointsSouth;
         ofVboMesh				particlePointsWest;
         ofVboMesh				particlePointsNorth;
+        ofVboMesh				particlePointsTri;
 
 		ofxAutoReloadedShader	particleUpdate;
 		ofxAutoReloadedShader	particleDrawUnsorted;
@@ -40,8 +41,9 @@ class ParticleSystemGPU
 		ofImage					particleImage;
 
 		ofxPanel				gui;
-		ofParameter<float>		particleMaxAge;
-		ofParameter<float>		noisePositionScale;
+        ofParameter<float>		particleMaxAge;
+        ofParameter<float>		particleSpawnFreq;
+        ofParameter<float>		noisePositionScale;
 		ofParameter<float>		noiseMagnitude;
 		ofParameter<float>		noiseTimeScale;
 		ofParameter<float>		noisePersistence;
@@ -60,6 +62,10 @@ class ParticleSystemGPU
         ofParameter<float>		particleSize;
         ofParameter<float>		particleSizeMin;
         ofParameter<float>		bangTime;
+
+        ofParameter<float>		griding;
+        ofParameter<bool>		triangles;
+        ofParameter<float>		scaling;
         int spawnState;
         float lastBang;
 };

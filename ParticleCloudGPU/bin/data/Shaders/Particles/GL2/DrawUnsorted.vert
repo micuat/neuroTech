@@ -25,6 +25,8 @@ varying vec4 v_particleColor;
 
 float oneOverTexDim = 1.0f / 128.0f;
 
+uniform int u_griding;
+
 // ----------------------------
 void main ()
 {
@@ -84,8 +86,22 @@ void main ()
 	//pos = vec3( rand( texCoord + pos.xy ), rand( texCoord.xy + pos.yz ), rand( texCoord.yx + pos.yz ));
 
 	float frac = particleData.w / u_particleMaxAge;
+	float fracNext = particleDataNext.w / u_particleMaxAge;
 
-	v_particleColor = mix(u_particleStartColor, u_particleEndColor, frac );
+	if(frac >= 1.0f || fracNext >= 1.0f)
+	{
+		pos = posNext;//vec3(1000000, 1000000, 1000000);
+		gl_Position = u_modelViewProjectionMatrix * vec4(pos, 1.0);
+
+		v_particleColor = vec4(0, 0, 0, 0);
+		return;
+	}
+	else
+	{
+		v_particleColor = mix(u_particleStartColor, u_particleEndColor, frac );
+		//v_particleColor = vec4(0,1,1,1);
+	}
+
 	if(mod(texCoord.s * 200, 2) <= 0.5f)
 	{
 		//pos = pos * 0.0f + texCoord * 1.0f;
@@ -105,10 +121,18 @@ void main ()
 		{
 			alpha = (u_stringTheory - dist) / u_stringTheory;
 			if(alpha > 0.5f)
+			{
 				alpha = 1;
+			}
 			else
+			{
 				alpha *= 2;
+			}
 			//alpha *= alpha;
+		}
+		else
+		{
+			pos = posNext;
 		}
 		v_particleColor.a *= alpha;
 	}

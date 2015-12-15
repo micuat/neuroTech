@@ -22,6 +22,7 @@ void ParticleSystemGPU::init( int _texSize )
 	string xmlSettingsPath = "Settings/Main.xml";
 	gui.setup( "Main", xmlSettingsPath );
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
+	gui.add( particleSpawnFreq.set("Particle Spawn Freq", 8.0f, 1.0f, 16.0f) );
 	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 2.0f) );
 	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 10.0f) );
 	gui.add( noiseTimeScale.set("Noise Time Scale", 1.0 / 4000.0, 0.001f, 1.0f) );
@@ -34,6 +35,9 @@ void ParticleSystemGPU::init( int _texSize )
 	gui.add( particleSizeMin.set("Particle Size Min", 0.001, 0.0001f, 0.05f) );
 	gui.add( stringTheory.set("String", 0.2f, 0.0001f, 1.0f) );
     gui.add( bangTime.set("Bang Time", 0.5f, 0.0001f, 1.0f));
+    gui.add( griding.set("Grid", 0, 0, 1));
+    gui.add( triangles.set("Triangles", false));
+    gui.add( scaling.set("Scaling", 1, 0.01f, 1));
     //gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
 	//gui.add( twistNoisePosScale.set("Twist Noise Pos Scale", 0.25, 0.0f, 2.0f) );
 	//gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
@@ -122,6 +126,7 @@ void ParticleSystemGPU::init( int _texSize )
     particlePointsSouth = particlePoints;
     particlePointsWest = particlePoints;
     particlePointsNorth = particlePoints;
+    particlePointsTri = particlePoints;
     for (int y = 0; y < textureSize; y++)
     {
         for (int x = 0; x < textureSize - 2; x++)
@@ -148,6 +153,18 @@ void ParticleSystemGPU::init( int _texSize )
         for (int y = 1; y < textureSize - 1; y++)
         {
             particlePointsNorth.addIndex(y * textureSize + x);
+        }
+    }
+    for (int y = 0; y < textureSize - 1; y++)
+    {
+        for (int x = 0; x < textureSize - 1; x++)
+        {
+            particlePointsTri.addIndex(y * textureSize + x);
+            particlePointsTri.addIndex((y+1) * textureSize + x);
+            particlePointsTri.addIndex(y * textureSize + x+1);
+            particlePointsTri.addIndex(y * textureSize + x+1);
+            particlePointsTri.addIndex((y+1) * textureSize + x);
+            particlePointsTri.addIndex((y+1) * textureSize + x+1);
         }
     }
 
@@ -179,6 +196,8 @@ void ParticleSystemGPU::update( float _time, float _timeStep )
 			
 			particleUpdate.setUniform1f("u_particleMaxAge", particleMaxAge );
 			
+			particleUpdate.setUniform1f("u_particleSpawnFreq", particleSpawnFreq );
+
 			particleUpdate.setUniform1f("u_noisePositionScale", noisePositionScale );
 			particleUpdate.setUniform1f("u_noiseTimeScale", noiseTimeScale );
 			particleUpdate.setUniform1f("u_noisePersistence", noisePersistence );
@@ -196,6 +215,10 @@ void ParticleSystemGPU::update( float _time, float _timeStep )
             }
 			
             particleUpdate.setUniform1i("u_spawnParticles", spawnState);
+
+            particleUpdate.setUniform1f("u_griding", griding);
+
+            particleUpdate.setUniform1f("u_scaling", scaling);
 
             particleDataFbo.source()->draw(0,0);
 		
@@ -284,6 +307,14 @@ void ParticleSystemGPU::draw( ofCamera* _camera )
             particleDrawUnsorted.setUniform1i("u_stringDirection", 3);
 
             particlePointsNorth.draw();
+        }
+        if (triangles)
+        {
+            particlePointsTri.setMode(OF_PRIMITIVE_TRIANGLES);
+            particleDrawUnsorted.setUniform1i("u_meshMode", particlePointsTri.getMode()); // 3: lines 6: points
+            particleDrawUnsorted.setUniform1i("u_stringDirection", 0); // 0: East 1: South 2: West 3: North
+
+            particlePointsTri.draw();
         }
 
 	particleDrawUnsorted.end();

@@ -5,6 +5,7 @@
 // Hmm, do we really need to give the path to the shader if it's in the same folder?
 #pragma include "Shaders/Common/ShaderHelpers.glslinc"
 //#pragma include "Shaders/Common/SimplexNoiseDerivatives4D.glslinc"
+#pragma include "Shaders/Common/Noise2D.glslinc"
 #pragma include "Shaders/Common/Noise4D.glslinc"
 
 uniform sampler2D u_positionAndAgeTex;
@@ -13,6 +14,7 @@ uniform float u_time;
 uniform float u_timeStep;
 
 uniform float u_particleMaxAge;
+uniform float u_particleSpawnFreq;
 
 uniform float u_noisePositionScale = 1.5;
 uniform float u_noiseMagnitude = 0.075;
@@ -21,6 +23,10 @@ uniform float u_noisePersistence = 0.2;
 uniform vec3 u_wind = vec3( 0.5, 0.0, 0.0 );
 
 uniform int u_spawnParticles;
+
+uniform float u_griding;
+
+uniform float u_scaling;
 
 const int OCTAVES = 3;
 
@@ -39,12 +45,44 @@ void main (void)
 
 	age += u_timeStep;
 
-	if( age > u_particleMaxAge && u_spawnParticles != 0 && mod(age, 1) < 0.1f)
+	if( age > u_particleMaxAge )
 	{
-		age = age - u_particleMaxAge;
+		if(u_spawnParticles != 0 && mod(snoise(texCoord * u_particleSpawnFreq) + u_time / u_particleMaxAge, 1) < 0.3f)
+		{
+			age = mod(age, 1) - u_particleMaxAge;
 
-		float spawnRadius = 0.1;
-		pos = randomPointOnSphere( vec3( rand( texCoord + pos.xy ), rand( texCoord.xy + pos.yz ), rand( texCoord.yx + pos.yz ))) * spawnRadius;
+			if(u_griding > 0)
+			{
+				vec3 gridPos = vec3(texCoord - vec2(0.5f, 0.5f), 0);
+				if(texCoord.x > 0.5f)
+				{
+					gridPos.x = gridPos.x * u_scaling + 0.5f * (1 - u_scaling);
+				}
+				else
+				{
+					gridPos.x = gridPos.x * u_scaling + -0.5f * (1 - u_scaling);
+				}
+				if(texCoord.y > 0.5f)
+				{
+					gridPos.y = gridPos.y * u_scaling + 0.5f * (1 - u_scaling);
+				}
+				else
+				{
+					gridPos.y = gridPos.y * u_scaling + -0.5f * (1 - u_scaling);
+				}
+				pos = gridPos;
+			}
+			else
+			{
+				float spawnRadius = 0.1;
+				pos = randomPointOnSphere( vec3( rand( texCoord + pos.xy ), rand( texCoord.xy + pos.yz ), rand( texCoord.yx + pos.yz ))) * spawnRadius;
+			}
+		}
+		else
+		{
+			//gl_FragData[0] = vec4( vec3(1000000, 1000000, 1000000), age );
+			//return;
+		}
 	}
 
 	vec3 noisePosition = pos  * u_noisePositionScale;
@@ -57,6 +95,29 @@ void main (void)
 	vec3 totalVelocity = vec3(posDir.x * u_wind.x, u_wind.y, posDir.y * u_wind.z) + noiseVelocity;
 
 	vec3 newPos = pos + totalVelocity * u_timeStep;
+
+	if(u_griding > 0)
+	{
+		vec3 gridPos = vec3(texCoord - vec2(0.5f, 0.5f), 0);
+		if(texCoord.x > 0.5f)
+		{
+			gridPos.x = gridPos.x * u_scaling + 0.5f * (1 - u_scaling);
+		}
+		else
+		{
+			gridPos.x = gridPos.x * u_scaling + -0.5f * (1 - u_scaling);
+		}
+		if(texCoord.y > 0.5f)
+		{
+			gridPos.y = gridPos.y * u_scaling + 0.5f * (1 - u_scaling);
+		}
+		else
+		{
+			gridPos.y = gridPos.y * u_scaling + -0.5f * (1 - u_scaling);
+		}
+
+		newPos.xyz = newPos * (1 - u_griding) + gridPos * u_griding;
+	}
 
 	pos = newPos;
 
