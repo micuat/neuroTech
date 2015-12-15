@@ -64,6 +64,7 @@ class ParticleSystemGPU
         ofParameter<float>		bangTime;
 
         ofParameter<float>		griding;
+        ofParameter<float>		cylindering;
         ofParameter<bool>		triangles;
         ofParameter<float>		scaling;
         int spawnState;

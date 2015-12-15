@@ -36,6 +36,7 @@ void ParticleSystemGPU::init( int _texSize )
 	gui.add( stringTheory.set("String", 0.2f, 0.0001f, 1.0f) );
     gui.add( bangTime.set("Bang Time", 0.5f, 0.0001f, 1.0f));
     gui.add( griding.set("Grid", 0, 0, 1));
+    gui.add( cylindering.set("Cylinder", 0, 0, 1));
     gui.add( triangles.set("Triangles", false));
     gui.add( scaling.set("Scaling", 1, 0.01f, 1));
     //gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
@@ -217,6 +218,7 @@ void ParticleSystemGPU::update( float _time, float _timeStep )
             particleUpdate.setUniform1i("u_spawnParticles", spawnState);
 
             particleUpdate.setUniform1f("u_griding", griding);
+            particleUpdate.setUniform1f("u_cylindering", cylindering);
 
             particleUpdate.setUniform1f("u_scaling", scaling);
 
@@ -280,6 +282,9 @@ void ParticleSystemGPU::draw( ofCamera* _camera )
 
         for (int i = 0; i < 2; i++)
         {
+            if (i == 1 && particleSizeMin <= 0.0002f)
+                break;
+
             particlePointsEast.setMode(modes[i]);
             particlePointsSouth.setMode(modes[i]);
             particlePointsWest.setMode(modes[i]);

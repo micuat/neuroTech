@@ -17,7 +17,7 @@ void ofApp::setup()
 	
 	// Give us a starting point for the camera
 	camera.setNearClip(0.01f);
-	camera.setPosition( 0, 0.4, 1.0 );
+	camera.setPosition( 0, 0, 1.0 );
 	camera.setMovementMaxSpeed( 0.01f );
 
 	time = 0.0f;
@@ -90,8 +90,8 @@ void ofApp::draw()
 
 	particles.update( time, timeStep );
 	
-    camera.rotateAround(ofGetElapsedTimef() * 0.01f, ofVec3f(0, 1, 0), ofVec3f(0, 0.4f, 0));
-    camera.lookAt(ofVec3f(0, 0.4f, 0));
+    //camera.rotateAround(ofGetElapsedTimef() * 0.01f, ofVec3f(0, 1, 0), ofVec3f(0, 0.4f, 0));
+    camera.lookAt(ofVec3f(0, 0, 0));
 	camera.begin();
 	
 		// draw a grid on the floor

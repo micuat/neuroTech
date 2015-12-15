@@ -25,10 +25,36 @@ uniform vec3 u_wind = vec3( 0.5, 0.0, 0.0 );
 uniform int u_spawnParticles;
 
 uniform float u_griding;
+uniform float u_cylindering;
 
 uniform float u_scaling;
 
 const int OCTAVES = 3;
+
+vec3 gridPosition(vec2 texCoord, float scale)
+{
+	vec3 gridPos = vec3(texCoord - vec2(0.5f, 0.5f), 0);
+	//gridPos.z = gridPos.x * gridPos.x;
+	vec3 cylinderPos = vec3(cos((texCoord.x - 0.5f) * 2 * 3.1415f), texCoord.y - 0.5f, sin((texCoord.x - 0.5f) * 2 * 3.1415f));
+	gridPos = gridPos * (1 - u_cylindering) + cylinderPos * u_cylindering;
+	if(texCoord.x > 0.5f)
+	{
+		gridPos.x = gridPos.x * u_scaling + 0.5f * (1 - u_scaling);
+	}
+	else
+	{
+		gridPos.x = gridPos.x * u_scaling + -0.5f * (1 - u_scaling);
+	}
+	if(texCoord.y > 0.5f)
+	{
+		gridPos.y = gridPos.y * u_scaling + 0.5f * (1 - u_scaling);
+	}
+	else
+	{
+		gridPos.y = gridPos.y * u_scaling + -0.5f * (1 - u_scaling);
+	}
+	return gridPos;
+}
 
 // -----------------------------------------------------------
 void main (void)
@@ -53,24 +79,7 @@ void main (void)
 
 			if(u_griding > 0)
 			{
-				vec3 gridPos = vec3(texCoord - vec2(0.5f, 0.5f), 0);
-				if(texCoord.x > 0.5f)
-				{
-					gridPos.x = gridPos.x * u_scaling + 0.5f * (1 - u_scaling);
-				}
-				else
-				{
-					gridPos.x = gridPos.x * u_scaling + -0.5f * (1 - u_scaling);
-				}
-				if(texCoord.y > 0.5f)
-				{
-					gridPos.y = gridPos.y * u_scaling + 0.5f * (1 - u_scaling);
-				}
-				else
-				{
-					gridPos.y = gridPos.y * u_scaling + -0.5f * (1 - u_scaling);
-				}
-				pos = gridPos;
+				pos = gridPosition(texCoord, u_griding);
 			}
 			else
 			{
@@ -98,24 +107,7 @@ void main (void)
 
 	if(u_griding > 0)
 	{
-		vec3 gridPos = vec3(texCoord - vec2(0.5f, 0.5f), 0);
-		if(texCoord.x > 0.5f)
-		{
-			gridPos.x = gridPos.x * u_scaling + 0.5f * (1 - u_scaling);
-		}
-		else
-		{
-			gridPos.x = gridPos.x * u_scaling + -0.5f * (1 - u_scaling);
-		}
-		if(texCoord.y > 0.5f)
-		{
-			gridPos.y = gridPos.y * u_scaling + 0.5f * (1 - u_scaling);
-		}
-		else
-		{
-			gridPos.y = gridPos.y * u_scaling + -0.5f * (1 - u_scaling);
-		}
-
+		vec3 gridPos = gridPosition(texCoord, u_griding);;
 		newPos.xyz = newPos * (1 - u_griding) + gridPos * u_griding;
 	}
 
