@@ -28,6 +28,14 @@ void ofApp::setup()
     //receiver.setup(8000);
     receiver.setup(9999);
     particles.spawnState = 1;
+
+    //soundStream = new ofSoundStream();
+    //soundStream->listDevices();
+    //soundStream->setDeviceID(4);
+    //soundStream->setup(&fftLive, 0, 1, 44100, fftLive.getBufferSize(), 4);
+    fftLive.setMirrorData(false);
+    fftLive.setup();
+    //fftLive.soundStream = soundStream;
 }
 
 
@@ -35,6 +43,11 @@ void ofApp::setup()
 //
 void ofApp::update()
 {
+    fftLive.update();
+    const int fftN = 16;
+    particles.fftPeaks = new float[fftN];
+    fftLive.getFftPeakData(particles.fftPeaks, fftN);
+
 	// Update time, this let's us hit space and slow down time, even reverse it.
 	if( ofGetKeyPressed(' ') ) { timeStep = ofLerp( timeStep, ofMap( ofGetMouseX(), 0, ofGetWidth(), -(1.0f/60.0f), (1.0f/60.0f) ), 0.1f );}
 	else { timeStep = ofLerp( timeStep, 1.0f / 60.0f, 0.1f ); }

@@ -14,6 +14,7 @@
 #include "ParticleSystemGPU.h"
 
 #include "ofxOsc.h"
+#include "ofxFFTLive.h"
 
 class ofApp : public ofBaseApp
 {
@@ -38,4 +39,7 @@ class ofApp : public ofBaseApp
 
         ofxOscReceiver receiver;
         float prevBv;
+
+        ofSoundStream* soundStream;
+        ofxFFTLive fftLive;
 };

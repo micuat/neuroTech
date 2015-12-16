@@ -35,7 +35,7 @@ vec3 gridPosition(vec2 texCoord, float scale)
 {
 	vec3 gridPos = vec3(texCoord - vec2(0.5f, 0.5f), 0);
 	//gridPos.z = gridPos.x * gridPos.x;
-	vec3 cylinderPos = vec3(cos((texCoord.x - 0.5f) * 2 * 3.1415f), texCoord.y - 0.5f, sin((texCoord.x - 0.5f) * 2 * 3.1415f));
+	vec3 cylinderPos = vec3(sin((texCoord.x - 0.5f) * 2 * 3.1415f) * 0.25f, texCoord.y - 0.5f, -cos((texCoord.x - 0.5f) * 2 * 3.1415f) * 0.25f);
 	gridPos = gridPos * (1 - u_cylindering) + cylinderPos * u_cylindering;
 	if(texCoord.x > 0.5f)
 	{
