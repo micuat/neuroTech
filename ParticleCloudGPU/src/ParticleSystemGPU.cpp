@@ -100,8 +100,7 @@ void ParticleSystemGPU::init( int _texSize )
 	ofVec4f* startPositionsAndAge = new ofVec4f[numParticles];
 	
 	// We also create a vbo that has the texture coordinate for each particle's data
-    ofVboMesh particlePoints;
-	particlePoints.setMode( OF_PRIMITIVE_LINES );
+	particlePoints.setMode( OF_PRIMITIVE_POINTS );
 	
 	int tmpIndex = 0;
 	for( int y = 0; y < textureSize; y++ )
@@ -286,26 +285,21 @@ void ParticleSystemGPU::draw( ofCamera* _camera )
         }
 
 
-        ofPrimitiveMode modes[] = { OF_PRIMITIVE_LINES, OF_PRIMITIVE_POINTS };
-
-        for (int i = 0; i < 2; i++)
+        particleDrawUnsorted.setUniform1i("u_meshMode", particlePoints.getMode()); // 3: lines 6: points
+        particleDrawUnsorted.setUniform1i("u_stringDirection", 0); // 0: East 1: South 2: West 3: North
+        
+        particlePoints.draw();
         {
-            if (i == 1 && particleSizeMin <= 0.0002f)
-                break;
-
-            particlePointsEast.setMode(modes[i]);
-            particlePointsSouth.setMode(modes[i]);
-            particlePointsWest.setMode(modes[i]);
-            particlePointsNorth.setMode(modes[i]);
+            particlePointsEast.setMode(OF_PRIMITIVE_LINES);
+            particlePointsSouth.setMode(OF_PRIMITIVE_LINES);
+            particlePointsWest.setMode(OF_PRIMITIVE_LINES);
+            particlePointsNorth.setMode(OF_PRIMITIVE_LINES);
 
             particleDrawUnsorted.setUniform1i("u_meshMode", particlePointsEast.getMode()); // 3: lines 6: points
             particleDrawUnsorted.setUniform1i("u_stringDirection", 0); // 0: East 1: South 2: West 3: North
 
             particlePointsEast.draw();
 
-            if (i == 1)
-                break;
-            
             particleDrawUnsorted.setUniform1i("u_meshMode", particlePointsSouth.getMode()); // 3: lines 6: points
             particleDrawUnsorted.setUniform1i("u_stringDirection", 1);
 

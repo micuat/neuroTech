@@ -29,6 +29,7 @@ class ParticleSystemGPU
 	
 		FboPingPong				particleDataFbo;
 		
+        ofVboMesh				particlePoints;
         ofVboMesh				particlePointsEast;
         ofVboMesh				particlePointsSouth;
         ofVboMesh				particlePointsWest;
