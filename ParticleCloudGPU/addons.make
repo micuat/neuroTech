@@ -1,5 +1,5 @@
-ofxGui
-ofxOsc
 ofxAutoReloadedShader
 ofxFFT
+ofxGui
+ofxOsc
 ofxPubSubOsc

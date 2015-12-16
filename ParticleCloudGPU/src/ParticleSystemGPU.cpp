@@ -13,34 +13,31 @@
 //
 void ParticleSystemGPU::init( int _texSize )
 {
-    ofxSubscribeOsc(9990, "/pcg/string", stringTheory);
-    std::function<void(ofxOscMessage &)> f = [&](ofxOscMessage& m) {
-        lastBang = ofGetElapsedTimef();
-    };
-    ofxSubscribeOsc(9990, "/pcg/bang", f);
-
 	string xmlSettingsPath = "Settings/Main.xml";
-	gui.setup( "Main", xmlSettingsPath );
-	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
-	gui.add( particleSpawnFreq.set("Particle Spawn Freq", 8.0f, 1.0f, 16.0f) );
-	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 2.0f) );
-	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 10.0f) );
-	gui.add( noiseTimeScale.set("Noise Time Scale", 1.0 / 4000.0, 0.001f, 1.0f) );
-	gui.add( noisePersistence.set("Noise Persistence", 0.2, 0.001f, 1.0f) );
-    gui.add(baseSpeed.set("Wind", ofVec3f(0.5, 0, 0), ofVec3f(-2, -2, -2), ofVec3f(2, 2, 2)));
-    gui.add(baseSpeedBang.set("Wind Bang", ofVec3f(2.5, 0, 0), ofVec3f(-2, -2, -2), ofVec3f(2, 2, 2)));
-    gui.add( startColor.set("Start Color", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	gui.add( particleSize.set("Particle Size", 0.01, 0.0001f, 0.05f) );
-	gui.add( particleSizeMin.set("Particle Size Min", 0.001, 0.0001f, 0.05f) );
-	gui.add( stringTheory.set("String", 0.2f, 0.0001f, 1.0f) );
-    gui.add( bangTime.set("Bang Time", 0.5f, 0.0001f, 1.0f));
-    gui.add( griding.set("Grid", 0, 0, 1));
-    gui.add( cylindering.set("Cylinder", 0, 0, 1));
-    gui.add( triangles.set("Triangles", false));
-    gui.add( scaling.set("Scaling", 1, 0.01f, 1));
-    gui.add( fftThreshold.set("FFT Threshold", 1, 0, 2));
-    gui.add( fftChannel.set("FFT Channel", 10, 0, 15));
+	gui.setup("Main", xmlSettingsPath);
+    gui.add(label.setup("OSC", "/axon/particles + name"));
+    gui.add(label2.setup("Port", "9990"));
+	gui.add(particleMaxAge.set("/age", 10.0f, 0.0f, 20.0f));
+	gui.add(particleSpawnFreq.set("/spawn/spatial", 8.0f, 1.0f, 16.0f));
+	gui.add(noiseMagnitude.set("/noise/magnitude", 0.075, 0.01f, 2.0f));
+	gui.add(noisePositionScale.set("/noise/spatial", 1.5f, 0.01f, 10.0f));
+	gui.add(noiseTimeScale.set("/noise/time", 1.0 / 4000.0, 0.001f, 1.0f));
+	gui.add(noisePersistence.set("/noise/persistence", 0.2, 0.001f, 1.0f));
+    gui.add(baseSpeed.set("/wind", ofVec3f(0.5, 0, 0), ofVec3f(-2, -2, -2), ofVec3f(2, 2, 2)));
+    gui.add(baseSpeedBang.set("/wind/bang", ofVec3f(2.5, 0, 0), ofVec3f(-2, -2, -2), ofVec3f(2, 2, 2)));
+    gui.add(startColor.set("/color/start", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)));
+	gui.add(endColor.set("/color/end", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)));
+	gui.add(particleSize.set("/size/max", 0.01, 0.0001f, 0.05f));
+	gui.add(particleSizeMin.set("/size/min", 0.001, 0.0001f, 0.05f));
+	gui.add(stringTheory.set("/string", 0.2f, 0.0001f, 1.0f));
+    gui.add(bangTime.set("/bang/duration", 0.5f, 0.0001f, 1.0f));
+    gui.add(griding.set("/grid", 0, 0, 1));
+    gui.add(cylindering.set("/cylinder", 0, 0, 1));
+    gui.add(triangles.set("/triangles", false));
+    gui.add(spawning.set("/spawn", true));
+    gui.add(scaling.set("/scaling", 1, 0.01f, 1));
+    gui.add(fftThreshold.set("/fft/threshold", 1, 0, 2));
+    gui.add(fftChannel.set("/fft/channel", 10, 0, 15));
     //gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
 	//gui.add( twistNoisePosScale.set("Twist Noise Pos Scale", 0.25, 0.0f, 2.0f) );
 	//gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
@@ -48,6 +45,71 @@ void ParticleSystemGPU::init( int _texSize )
 	
 	gui.loadFromFile( xmlSettingsPath );
 	
+    ofxGetOscSubscriber(9990).subscribe("/axon/particles/bang", [&](ofxOscMessage& m) {
+        lastBang = ofGetElapsedTimef();
+    });
+    auto f = [](ofParameter<float>& p) {
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName(), [&](ofxOscMessage& m) {
+            p = ofMap(m.getArgAsInt(0), 0, 127, p.getMin(), p.getMax());
+        });
+    };
+    f(particleMaxAge);
+    f(particleSpawnFreq);
+    f(noiseMagnitude);
+    f(noisePositionScale);
+    f(noiseTimeScale);
+    f(noisePersistence);
+    f(particleSize);
+    f(particleSizeMin);
+    f(stringTheory);
+    f(bangTime);
+    f(griding);
+    f(cylindering);
+    f(scaling);
+    f(fftThreshold);
+    auto fv = [](ofParameter<ofVec3f>& p) {
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/x", [&](ofxOscMessage& m) {
+            ofVec3f v = p.get();
+            v.x = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().x, p.getMax().x);
+            p.set(v);
+        });
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/y", [&](ofxOscMessage& m) {
+            ofVec3f v = p.get();
+            v.y = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().y, p.getMax().y);
+            p.set(v);
+        });
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/z", [&](ofxOscMessage& m) {
+            ofVec3f v = p.get();
+            v.z = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().z, p.getMax().z);
+            p.set(v);
+        });
+    };
+    fv(baseSpeed);
+    fv(baseSpeedBang);
+    auto fc = [](ofParameter<ofColor>& p) {
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/r", [&](ofxOscMessage& m) {
+            ofColor c = p.get();
+            c.r = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().r, p.getMax().r);
+            p.set(c);
+        });
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/g", [&](ofxOscMessage& m) {
+            ofColor c = p.get();
+            c.g = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().g, p.getMax().g);
+            p.set(c);
+        });
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/b", [&](ofxOscMessage& m) {
+            ofColor c = p.get();
+            c.b = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().b, p.getMax().b);
+            p.set(c);
+        });
+        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/a", [&](ofxOscMessage& m) {
+            ofColor c = p.get();
+            c.a = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().a, p.getMax().a);
+            p.set(c);
+        });
+    };
+    fc(startColor);
+    fc(endColor);
 
 	// To use a texture with point sprites it will need to be created as a GL_TEXTURE_2D and not a GL_TEXTURE_RECTANGLE
 	// This way it has texture coordinates in the range 0..1 instead of 0..imagewith
@@ -222,7 +284,7 @@ void ParticleSystemGPU::update( float _time, float _timeStep )
                 particleUpdate.setUniform3f("u_wind", baseSpeed.get().x, baseSpeed.get().y, baseSpeed.get().z);
             }
 			
-            particleUpdate.setUniform1i("u_spawnParticles", spawnState);
+            particleUpdate.setUniform1i("u_spawnParticles", spawnState || spawning);
 
             particleUpdate.setUniform1f("u_griding", griding);
             particleUpdate.setUniform1f("u_cylindering", cylindering);

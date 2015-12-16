@@ -1,25 +1,24 @@
 <Main>
-	<Particle_Max_Age>3.33333</Particle_Max_Age>
-	<Noise_Magnitude>1.95357</Noise_Magnitude>
-	<Noise_Position_Scale>3.0403</Noise_Position_Scale>
-	<Noise_Time_Scale>0.68365</Noise_Time_Scale>
-	<Noise_Persistence>0.49384</Noise_Persistence>
-	<Wind>0.0544217, 0.027211, 0.0136054</Wind>
-	<Start_Color>38, 73, 215, 214</Start_Color>
-	<End_Color>246, 45, 45, 234</End_Color>
-	<Twist_Noise_Time_Scale>0.0233333</Twist_Noise_Time_Scale>
-	<Twist_Noise_Pos_Scale>0.06</Twist_Noise_Pos_Scale>
-	<Twist_Min_Ang>-0.266667</Twist_Min_Ang>
-	<Twist_Max_Ang>0.9</Twist_Max_Ang>
-	<Particle_Size>0.0177313</Particle_Size>
-	<Particle_Alpha>0.74</Particle_Alpha>
-	<Particle_Opacity_Scale>0.786667</Particle_Opacity_Scale>
-	<Light_Position>-1.05442, 1.66667, -0.85034</Light_Position>
-	<Light_Look_At>0.0340133, -0.340136, -0.680272</Light_Look_At>
+	<_age>5.4</_age>
+	<_spawn_spatial>8</_spawn_spatial>
+	<_noise_magnitude>0.799367</_noise_magnitude>
+	<_noise_spatial>4.1059</_noise_spatial>
+	<_noise_time>0.00025</_noise_time>
+	<_noise_persistence>0.2</_noise_persistence>
+	<_wind>0, 0, 0</_wind>
+	<_wind_bang>0.394558, 0, 0.408163</_wind_bang>
+	<_color_start>225, 29, 27, 231</_color_start>
+	<_color_end>20, 23, 237, 239</_color_end>
+	<_size_max>0.00825033</_size_max>
+	<_size_min>0.001</_size_min>
+	<_string>0.010099</_string>
+	<_bang_duration>0.5</_bang_duration>
+	<_grid>0</_grid>
+	<_cylinder>0</_cylinder>
+	<_triangles>0</_triangles>
+	<_spawn>1</_spawn>
+	<_scaling>1</_scaling>
+	<_fft_threshold>0.286667</_fft_threshold>
+	<_fft_channel>10</_fft_channel>
 <Main/>
-<String>0.0001</String>
-<Wind_Bang>1.68707, 1.06122, 1.68707</Wind_Bang>
-<Bang_Time>0.073426</Bang_Time>
-<Particle_Size_Min>0.00941467</Particle_Size_Min>
-<Grid>0.206667</Grid>
 </Main>

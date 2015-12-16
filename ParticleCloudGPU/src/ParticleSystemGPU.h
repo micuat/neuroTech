@@ -67,6 +67,7 @@ class ParticleSystemGPU
         ofParameter<float>		griding;
         ofParameter<float>		cylindering;
         ofParameter<bool>		triangles;
+        ofParameter<bool>		spawning;
         ofParameter<float>		scaling;
 
         ofParameter<int>        fftChannel;
@@ -74,4 +75,6 @@ class ParticleSystemGPU
         float *                 fftPeaks;
         int spawnState;
         float lastBang;
+
+        ofxLabel label, label2, label3;
 };
