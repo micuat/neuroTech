@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxSpidarMouse.h"
+#include "ofxCv.h"
 
 class ofApp : public ofBaseApp{
 
@@ -39,6 +41,9 @@ class ofApp : public ofBaseApp{
         ofxIntSlider distThreshold;
         ofxFloatSlider lineAlpha;
         ofxToggle mouseDebug;
+        ofxIntSlider forceDuration;
+        ofxFloatSlider forceIntensity, velocity;
+        ofxToggle bFeedback;
 
         ofVec2f sample;
         ofVec2f samplePrev;
@@ -52,4 +57,7 @@ class ofApp : public ofBaseApp{
         const int width = 640, height = 640;
 
         ofFbo fbo;
+
+        ofxSpidarMouse spidar;
+        ofxCv::KalmanPosition kalman;
 };

@@ -34,6 +34,11 @@ void ofApp::setup() {
                 stringsNew.addIndex(stringsNew.getNumVertices() - 1);
             }
         }
+
+        kalman.update(p0);
+        kalman.getPrediction();
+        ofPoint p = kalman.getPrediction();
+        spidar.setForce(kalman.getVelocity() * forceIntensity * ofVec2f(1, -1), forceDuration);
     };
     ofxSubscribeOsc(8000, "/muse/tsne", f);
     sampleIndex = 0;
@@ -131,14 +136,22 @@ void ofApp::setup() {
     gui.add(mouseDebug.setup("Mouse Debug", false));
     gui.add(distThreshold.setup("Distance", 150, 50, 300));
     gui.add(lineAlpha.setup("Line Alpha", 0.5f, 0, 1));
+    gui.add(forceDuration.setup("Force Duration", 1000, 0, 5000));
+    gui.add(forceIntensity.setup("Force Intensity", 30, 0, 100));
+    gui.add(velocity.setup("Velocity", 0, 0, 1));
+    gui.add(bFeedback.setup("Force Feedback", false));
     gui.loadFromFile("settings.xml");
     drawGui = false;
 
     fbo.allocate(width * 2, height * 2, GL_RGB);
 
-    ofSetWindowPosition(1920 + 400, -50);
-    ofSetWindowShape(1024 + 200, 768 + 200);
+    //ofSetWindowPosition(1920 + 400, -50);
+    //ofSetWindowShape(1024 + 200, 768 + 200);
     //ofSetFullscreen(true);
+
+    spidar.init();
+    spidar.open();
+    kalman.init(1e-4, 1e-1);
 }
 
 //--------------------------------------------------------------
