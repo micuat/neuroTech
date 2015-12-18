@@ -1,7 +1,10 @@
 ofxGui
+ofxOpenCv
 ofxOsc
+ofxCv
 ofxFFT
 ofxFluid
 ofxFx
 ofxNumpy
 ofxPubSubOsc
+ofxSpidarMouse
