@@ -60,4 +60,6 @@ class ofApp : public ofBaseApp{
 
         ofxSpidarMouse spidar;
         ofxCv::KalmanPosition kalman;
+
+        ofSerial serial;
 };

@@ -39,6 +39,12 @@ void ofApp::setup() {
         kalman.getPrediction();
         ofPoint p = kalman.getPrediction();
         spidar.setForce(kalman.getVelocity() * forceIntensity * ofVec2f(1, -1), forceDuration);
+
+        unsigned char *bytes = new unsigned char[3];
+        bytes[0] = (unsigned char)ofMap(p.x, -width * 0.5f, width * 0.5f, 0, 255, true);
+        bytes[1] = ',';
+        bytes[2] = (unsigned char)ofMap(p.y, height * 0.5f, -height * 0.5f, 80, 255, true);
+        serial.writeBytes(bytes, 3);
     };
     ofxSubscribeOsc(8000, "/muse/tsne", f);
     sampleIndex = 0;
@@ -145,13 +151,14 @@ void ofApp::setup() {
 
     fbo.allocate(width * 2, height * 2, GL_RGB);
 
-    //ofSetWindowPosition(1920 + 400, -50);
-    //ofSetWindowShape(1024 + 200, 768 + 200);
+    ofSetWindowPosition(1920 + 200, -50);
+    ofSetWindowShape(1024 + 200, 768 + 200);
     //ofSetFullscreen(true);
 
     spidar.init();
     spidar.open();
-    kalman.init(1e-4, 1e-1);
+    kalman.init(1e-5, 1e+0);
+    serial.setup("COM16", 115200); // windows example
 }
 
 //--------------------------------------------------------------
@@ -194,7 +201,7 @@ void ofApp::draw(){
         if(toggleColor)
             ofSetColor(ofFloatColor::fromHsb(0, 1, 1, ofMap(feat_matrix.at(count).at(sliderChannel), 0, sliderUpperLimit, 0, 0.2f, true)));
         else
-            ofSetColor(ofFloatColor::fromHsb((float)count / y.size() * 0.75f, 1, 1, 0.5f));
+            ofSetColor(ofFloatColor::fromHsb((float)count / y.size() * 0.75f, 1, 1, 0.95f));
 
         ofVec2f newPos;
         newPos.x = ofMap(p.x, minXY.x, maxXY.x, -width * 0.5f + 10, width * 0.5f - 10);
