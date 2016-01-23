@@ -68,6 +68,7 @@ class ParticleSystemGPU
         ofParameter<float>		cylindering;
         ofParameter<bool>		triangles;
         ofParameter<bool>		spawning;
+        ofParameter<bool>		recording;
         ofParameter<float>		scaling;
 
         ofParameter<int>        fftChannel;

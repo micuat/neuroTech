@@ -99,7 +99,10 @@ void ofApp::update()
 void ofApp::draw()
 {
     float timeDiff = ofMap(ofGetElapsedTimef() - particles.lastBang, 0, particles.bangTime, 0, 1);
-    ofBackgroundGradient(ofColor(ofMap(timeDiff, 0, 1, 255, 40, true)), ofColor(0, 0, 0), OF_GRADIENT_CIRCULAR);
+    if(timeDiff < 1)
+    ofBackgroundGradient(ofColor(ofMap(timeDiff, 0, 0.5, 255, 240, true)), ofColor(0, 0, 0), OF_GRADIENT_CIRCULAR);
+    else
+        ofBackground(0);
 
 	particles.update( time, timeStep );
 	
@@ -126,14 +129,19 @@ void ofApp::draw()
 	
 	int size = 196;
 	//particles.particleDataFbo.source()->getTextureReference(0).draw( 0,	 0, size, size );
-	
+
+    if(particles.recording)
+    {
+        ofSaveFrame();
+    }
+
 	if( drawGui )
 	{
 		particles.gui.draw();
 	}
 	
 	ofDisableDepthTest();
-	fontSmall.drawStringShadowed(ofToString(ofGetFrameRate(),2), ofGetWidth()-35, ofGetHeight() - 6, ofColor::whiteSmoke, ofColor::black );
+	//fontSmall.drawStringShadowed(ofToString(ofGetFrameRate(),2), ofGetWidth()-35, ofGetHeight() - 6, ofColor::whiteSmoke, ofColor::black );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -143,6 +151,10 @@ void ofApp::keyPressed(int key)
 	if( key == OF_KEY_TAB )
 	{
 		drawGui = !drawGui;
+        if(drawGui)
+            ofShowCursor();
+        else
+            ofHideCursor();
 	}
 	else if( key == 'f' )
 	{

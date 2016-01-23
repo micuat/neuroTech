@@ -38,6 +38,7 @@ void ParticleSystemGPU::init( int _texSize )
     gui.add(scaling.set("/scaling", 1, 0.01f, 1));
     gui.add(fftThreshold.set("/fft/threshold", 1, 0, 2));
     gui.add(fftChannel.set("/fft/channel", 10, 0, 15));
+    gui.add(recording.set("record", false));
     //gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
 	//gui.add( twistNoisePosScale.set("Twist Noise Pos Scale", 0.25, 0.0f, 2.0f) );
 	//gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
