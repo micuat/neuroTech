@@ -151,8 +151,9 @@ void ofApp::setup() {
 
     fbo.allocate(width * 2, height * 2, GL_RGB);
 
-    ofSetWindowPosition(1920 + 200, -50);
-    ofSetWindowShape(1024 + 200, 768 + 200);
+    ofSetWindowPosition(1920 - 200, -50);
+    //ofSetWindowShape(1024 + 200, 768 + 200);
+    ofSetWindowShape(1920 + 400, 1080 + 100);
     //ofSetFullscreen(true);
 
     spidar.init();

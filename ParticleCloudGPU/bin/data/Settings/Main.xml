@@ -1,24 +1,26 @@
 <Main>
 	<_age>5.4</_age>
-	<_spawn_spatial>8</_spawn_spatial>
-	<_noise_magnitude>0.799367</_noise_magnitude>
+	<_spawn_spatial>8.4</_spawn_spatial>
+	<_noise_magnitude>1.49587</_noise_magnitude>
 	<_noise_spatial>4.1059</_noise_spatial>
-	<_noise_time>0.00025</_noise_time>
+	<_noise_time>0.95338</_noise_time>
 	<_noise_persistence>0.2</_noise_persistence>
 	<_wind>0, 0, 0</_wind>
 	<_wind_bang>0.394558, 0, 0.408163</_wind_bang>
-	<_color_start>225, 29, 27, 231</_color_start>
-	<_color_end>20, 23, 237, 239</_color_end>
+	<_color_start>225, 87, 85, 231</_color_start>
+	<_color_end>85, 82, 237, 239</_color_end>
 	<_size_max>0.00825033</_size_max>
-	<_size_min>0.001</_size_min>
+	<_size_min>0.000765333</_size_min>
 	<_string>0.010099</_string>
 	<_bang_duration>0.5</_bang_duration>
-	<_grid>0</_grid>
-	<_cylinder>0</_cylinder>
-	<_triangles>0</_triangles>
+	<_grid>0.176667</_grid>
+	<_cylinder>1</_cylinder>
+	<_triangles>1</_triangles>
 	<_spawn>1</_spawn>
 	<_scaling>1</_scaling>
-	<_fft_threshold>0.286667</_fft_threshold>
+	<_fft_threshold>1.94667</_fft_threshold>
 	<_fft_channel>10</_fft_channel>
 <Main/>
+<OSC>/axon/particles + name</OSC>
+	<Port>9990</Port>
 </Main>

@@ -46,11 +46,11 @@ void ParticleSystemGPU::init( int _texSize )
 	
 	gui.loadFromFile( xmlSettingsPath );
 	
-    ofxGetOscSubscriber(9990).subscribe("/axon/particles/bang", [&](ofxOscMessage& m) {
+    ofxSubscribeOsc(9990, "/axon/particles/bang", [&](ofxOscMessage& m) {
         lastBang = ofGetElapsedTimef();
     });
     auto f = [](ofParameter<float>& p) {
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName(), [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName(), [&](ofxOscMessage& m) {
             p = ofMap(m.getArgAsInt(0), 0, 127, p.getMin(), p.getMax());
         });
     };
@@ -69,17 +69,17 @@ void ParticleSystemGPU::init( int _texSize )
     f(scaling);
     f(fftThreshold);
     auto fv = [](ofParameter<ofVec3f>& p) {
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/x", [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName() + "/x", [&](ofxOscMessage& m) {
             ofVec3f v = p.get();
             v.x = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().x, p.getMax().x);
             p.set(v);
         });
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/y", [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName() + "/y", [&](ofxOscMessage& m) {
             ofVec3f v = p.get();
             v.y = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().y, p.getMax().y);
             p.set(v);
         });
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/z", [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName() + "/z", [&](ofxOscMessage& m) {
             ofVec3f v = p.get();
             v.z = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().z, p.getMax().z);
             p.set(v);
@@ -88,22 +88,22 @@ void ParticleSystemGPU::init( int _texSize )
     fv(baseSpeed);
     fv(baseSpeedBang);
     auto fc = [](ofParameter<ofColor>& p) {
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/r", [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName() + "/r", [&](ofxOscMessage& m) {
             ofColor c = p.get();
             c.r = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().r, p.getMax().r);
             p.set(c);
         });
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/g", [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName() + "/g", [&](ofxOscMessage& m) {
             ofColor c = p.get();
             c.g = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().g, p.getMax().g);
             p.set(c);
         });
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/b", [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName() + "/b", [&](ofxOscMessage& m) {
             ofColor c = p.get();
             c.b = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().b, p.getMax().b);
             p.set(c);
         });
-        ofxGetOscSubscriber(9990).subscribe("/axon/particles" + p.getName() + "/a", [&](ofxOscMessage& m) {
+        ofxSubscribeOsc(9990, "/axon/particles" + p.getName() + "/a", [&](ofxOscMessage& m) {
             ofColor c = p.get();
             c.a = ofMap(m.getArgAsInt(0), 0, 127, p.getMin().a, p.getMax().a);
             p.set(c);
