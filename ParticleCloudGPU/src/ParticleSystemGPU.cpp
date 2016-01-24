@@ -305,7 +305,7 @@ void ParticleSystemGPU::update( float _time, float _timeStep )
 //
 void ParticleSystemGPU::draw( ofCamera* _camera )
 {
-	ofFloatColor particleStartCol = startColor.get();
+    ofFloatColor particleStartCol = startColor.get();
 	ofFloatColor particleEndCol = endColor.get();
 
     float timeDiff = ofMap(ofGetElapsedTimef() - lastBang, 0, bangTime, 0, 1);

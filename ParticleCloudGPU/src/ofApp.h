@@ -42,4 +42,8 @@ class ofApp : public ofBaseApp
 
         ofSoundStream* soundStream;
         ofxFFTLive fftLive;
+
+        ofFbo fbo;
+        ofImage image;
+        int count;
 };

@@ -17,7 +17,7 @@ void ofApp::setup()
 	
 	// Give us a starting point for the camera
 	camera.setNearClip(0.01f);
-	camera.setPosition( 0, 0, 1.0 );
+	camera.setPosition( 0, 0, 1.5f );
 	camera.setMovementMaxSpeed( 0.01f );
 
 	time = 0.0f;
@@ -36,6 +36,10 @@ void ofApp::setup()
     fftLive.setMirrorData(false);
     fftLive.setup();
     //fftLive.soundStream = soundStream;
+
+    fbo.allocate(1920, 1080, GL_RGBA);
+    image.allocate(1920, 1080, OF_IMAGE_COLOR_ALPHA);
+    count = 0;
 }
 
 
@@ -98,11 +102,14 @@ void ofApp::update()
 //
 void ofApp::draw()
 {
+    ofBackground(0);
+    fbo.begin();
+
     float timeDiff = ofMap(ofGetElapsedTimef() - particles.lastBang, 0, particles.bangTime, 0, 1);
-    if(timeDiff < 1)
-    ofBackgroundGradient(ofColor(ofMap(timeDiff, 0, 0.5, 255, 240, true)), ofColor(0, 0, 0), OF_GRADIENT_CIRCULAR);
-    else
-        ofBackground(0);
+    //if(timeDiff < 1)
+    //ofBackgroundGradient(ofColor(ofMap(timeDiff, 0, 0.5, 255, 240, true)), ofColor(0, 0, 0), OF_GRADIENT_CIRCULAR);
+    //else
+        ofBackground(0, 0);
 
 	particles.update( time, timeStep );
 	
@@ -127,13 +134,18 @@ void ofApp::draw()
 	ofEnableBlendMode( OF_BLENDMODE_ALPHA );
 	ofSetColor( ofColor::white );
 	
-	int size = 196;
-	//particles.particleDataFbo.source()->getTextureReference(0).draw( 0,	 0, size, size );
+    fbo.end();
+    fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
 
-    if(particles.recording)
+    if (particles.recording)
     {
-        ofSaveFrame();
+        fbo.readToPixels(image.getPixels());
+        image.save(ofToDataPath("screenshots/" + ofToString(count, 3, '0') + ".png"));
+        count++;
     }
+
+    int size = 196;
+	//particles.particleDataFbo.source()->getTextureReference(0).draw( 0,	 0, size, size );
 
 	if( drawGui )
 	{
